@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Voo</title>
+</head>
+<body>
+    <h1>Editar Voo {{ flight_code }}</h1>
+    <form method="POST">
+        Origem: <input type="text" name="origin" value="{{ flight.origin }}" required><br>
+        Destino: <input type="text" name="destiny" value="{{ flight.destiny }}" required><br>
+        Milhas: <input type="number" name="miles" value="{{ flight.miles }}" required><br>
+        Preço: <input type="number" name="ticket_price" value="{{ flight.ticket_price }}" required><br>
+        Tipo de avião: <input type="text" name="airplane_type" value="{{ flight.airplane_type }}" required><br>
+        Número de assentos: <input type="number" name="num_seats" value="{{ flight.num_seats }}" required><br>
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="{{ url_for('flight_management') }}">Voltar</a>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastrar Voo</title>
+</head>
+<body>
+    <h1>Cadastrar Novo Voo</h1>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        Código: <input type="text" name="flight_code" required><br>
+        Origem: <input type="text" name="origin" required><br>
+        Destino: <input type="text" name="destiny" required><br>
+        Milhas: <input type="number" name="miles" required><br>
+        Preço: <input type="number" name="ticket_price" required><br>
+        Tipo de avião: <input type="text" name="airplane_type" required><br>
+        Número de assentos: <input type="number" name="num_seats" required><br>
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="{{ url_for('flight_management') }}">Voltar</a>
+</body>
+</html>
