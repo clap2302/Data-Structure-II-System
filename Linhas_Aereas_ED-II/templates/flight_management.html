@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerenciamento de Voos</title>
+</head>
+<body>
+    <h1>Lista de Voos</h1>
+    <a href="{{ url_for('add_flight') }}">Cadastrar novo voo</a>
+    <br><br>
+
+    {% if flights %}
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Código</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Milhas</th>
+            <th>Preço</th>
+            <th>Tipo de Avião</th>
+            <th>Assentos</th>
+            <th>Ações</th>
+        </tr>
+        {% for code, f in flights.items() %}
+        <tr>
+            <td>{{ code }}</td>
+            <td>{{ f.origin }}</td>
+            <td>{{ f.destiny }}</td>
+            <td>{{ f.miles }}</td>
+            <td>{{ f.ticket_price }}</td>
+            <td>{{ f.airplane_type }}</td>
+            <td>{{ f.num_seats }}</td>
+            <td>
+                <a href="{{ url_for('edit_flight', flight_code=code) }}">Editar</a>
+                <form action="{{ url_for('delete_flight', flight_code=code) }}" method="POST" style="display:inline;">
+                    <button type="submit">Remover</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Nenhum voo cadastrado ainda.</p>
+    {% endif %}
+</body>
+</html>
