@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Página Inicial Administrativa</title>
+    </head>
+
+    <body>
+        <h2>Bem-vindo, {{ user }}!</h2>
+        <p>Gerencie os usuários:</p>
+
+        <h3>Adicionar usuário</h3>
+        <form method="post" action="/add_user">
+            Usuário: <input type="text" name="user"><br>
+            Senha: <input type="password" name="password"><br>
+            <input type="submit" value="Adicionar">
+        </form>
+
+        <h3>Remover usuário</h3>
+        <form method="post" action="/remove_user">
+            Usuário: <input type="text" name="user"><br>
+            <input type="submit" value="Remover">
+        </form>
+
+        <h3>Alterar senha</h3>
+        <form method="post" action="/change_password">
+            Usuário: <input type="text" name="user"><br>
+            Nova senha: <input type="password" name="new_password"><br>
+            <input type="submit" value="Alterar Senha">
+        </form>
+
+        <h3>Usuários atuais</h3>
+        <ul>
+            {% for u in users %}
+            <li>{{ u }}</li>
+            {% endfor %}
+        </ul>
+
+        <a href="{{ url_for('logout') }}">Sair</a>
+        <p style="color:green;">{{ msg }}</p>
+
+    </body>
+</html>

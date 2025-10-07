@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <tittle> Login </tittle>
+    </head>
+
+    <body>
+        <form method="post">
+            Usuário: <input type="text" name="user"><br>
+            Senha: <input type="password" name="password"><br>
+            <input type="submit" value="Entrar">
+        </form>
+
+        {% if erro %}
+        <p style="color:red;">{{ erro }}</p>
+        {% endif %}
+    </body>
+
+</html>
