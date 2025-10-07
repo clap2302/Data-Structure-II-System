@@ -7,7 +7,7 @@ flights = {}
 
 @app.route("/")
 def flight_management():
-    return render_template("fligh_management.html", flights=flights)
+    return render_template("flight_management.html", flights=flights)
 
 @app.route("/add", methods=["GET", "POST"])
 def add_flight():
