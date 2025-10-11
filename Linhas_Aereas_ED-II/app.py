@@ -1,13 +1,11 @@
 from flask import Flask, request, render_template, redirect, url_for
+from archives.data import flights
 
 app = Flask(__name__)
 
-# Dicionário principal: { flight_code: {dados do voo} }
-flights = {}
-
 @app.route("/")
 def flight_management():
-    return render_template("fligh_management.html", flights=flights)
+    return render_template("flight_management.html", flights=flights)
 
 @app.route("/add", methods=["GET", "POST"])
 def add_flight():
