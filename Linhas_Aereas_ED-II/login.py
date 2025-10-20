@@ -1,14 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
-
+from archives.data import users, adms
 app = Flask(__name__)
-
-# Dicionário de login/password em memória
-
-adms = {
-    "admin": "1234",
-    "funcionario": "abcd"
-}
-users = {}
 
 # Rota de login
 @app.route("/", methods=["GET", "POST"])
