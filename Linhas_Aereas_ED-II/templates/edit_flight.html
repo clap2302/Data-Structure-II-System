@@ -1,19 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>Editar Voo</title>
+    <meta charset="UTF-8">
+    <title>Editar Voo {{ flight_code }}</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f9fc;
+        margin: 0;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        background: #fff;
+        padding: 30px 50px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        width: 400px;
+    }
+
+    h1 {
+        color: #0059ff;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input {
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        transition: border-color 0.2s;
+    }
+
+    input:focus {
+        border-color: #0059ff;
+        outline: none;
+    }
+
+    button {
+        background-color: #0059ff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+        margin-top: 15px;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #003ec4;
+    }
+
+    .top-link {
+        text-align: left;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .top-link a {
+        color: #0059ff;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .top-link a:hover {
+        text-decoration: underline;
+    }
+    </style>
 </head>
+
 <body>
+    <div class="top-link">
+    <a href="{{ url_for('flights_bp.flight_management') }}">⬅️ Voltar à lista de voos</a>
+    </div>
+
+    <div class="container">
     <h1>Editar Voo {{ flight_code }}</h1>
+
     <form method="POST">
-        Origem: <input type="text" name="origin" value="{{ flight.origin }}" required><br>
-        Destino: <input type="text" name="destiny" value="{{ flight.destiny }}" required><br>
-        Milhas: <input type="number" name="miles" value="{{ flight.miles }}" required><br>
-        Preço: <input type="number" name="ticket_price" value="{{ flight.ticket_price }}" required><br>
-        Tipo de avião: <input type="text" name="airplane_type" value="{{ flight.airplane_type }}" required><br>
-        Número de assentos: <input type="number" name="num_seats" value="{{ flight.num_seats }}" required><br>
-        <button type="submit">Salvar</button>
+        <label for="origin">Origem:</label>
+        <input type="text" id="origin" name="origin" value="{{ flight.origin }}" required>
+
+        <label for="destiny">Destino:</label>
+        <input type="text" id="destiny" name="destiny" value="{{ flight.destiny }}" required>
+
+        <label for="miles">Milhas:</label>
+        <input type="number" id="miles" name="miles" value="{{ flight.miles }}" required>
+
+        <label for="ticket_price">Preço:</label>
+        <input type="number" id="ticket_price" name="ticket_price" value="{{ flight.ticket_price }}" step="0.01" required>
+
+        <label for="airplane_type">Tipo de avião:</label>
+        <input type="text" id="airplane_type" name="airplane_type" value="{{ flight.airplane_type }}" required>
+
+        <label for="num_seats">Número de assentos:</label>
+        <input type="number" id="num_seats" name="num_seats" value="{{ flight.num_seats }}" required>
+
+        <button type="submit">Salvar Alterações</button>
     </form>
-    <a href="{{ url_for('flight_management') }}">Voltar</a>
+    </div>
 </body>
 </html>

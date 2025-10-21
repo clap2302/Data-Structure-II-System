@@ -1,42 +1,125 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title> Página Inicial Administrativa</title>
-    </head>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Inicial Administrativa</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        margin: 40px;
+    }
+    h2, h3 {
+        color: #333;
+    }
+    form {
+        background: #fff;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    input[type="text"],
+    input[type="password"],
+    select {
+        padding: 5px;
+        margin: 5px 0;
+        width: 200px;
+    }
+    input[type="submit"],
+    button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover,
+    button:hover {
+        background: #0056b3;
+    }
+    ul {
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        list-style: none;
+    }
+    li {
+        margin: 5px 0;
+    }
+    a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    .top-links {
+        margin-bottom: 20px;
+    }
+    </style>
+</head>
 
-    <body>
-        <h2>Bem-vindo, {{ user }}!</h2>
-        <p>Gerencie os usuários:</p>
+<body>
+    <div class="top-links">
+    <a href="{{ url_for('login_bp.admin_dashboard') }}">⬅️ Voltar ao Painel</a> |
+    <a href="{{ url_for('flights_bp.flight_management') }}">✈️ Gerenciar Voos</a> |
+    <a href="{{ url_for('login_bp.logout') }}">🚪 Sair</a>
+    </div>
 
-        <h3>Adicionar usuário</h3>
-        <form method="post" action="/add_user">
-            Usuário: <input type="text" name="user"><br>
-            Senha: <input type="password" name="password"><br>
-            <input type="submit" value="Adicionar">
-        </form>
+    <h2>Bem-vindo, {{ user }}!</h2>
+    <p>Gerencie os usuários da plataforma:</p>
 
-        <h3>Remover usuário</h3>
-        <form method="post" action="/remove_user">
-            Usuário: <input type="text" name="user"><br>
-            <input type="submit" value="Remover">
-        </form>
+    <!-- Adicionar usuário -->
+    <h3>Adicionar usuário</h3>
+    <form method="post" action="{{ url_for('login_bp.add_user') }}">
+    <label>Usuário:</label><br>
+    <input type="text" name="user" required><br>
 
-        <h3>Alterar senha</h3>
-        <form method="post" action="/change_password">
-            Usuário: <input type="text" name="user"><br>
-            Nova senha: <input type="password" name="new_password"><br>
-            <input type="submit" value="Alterar Senha">
-        </form>
+    <label>Senha:</label><br>
+    <input type="password" name="password" required><br>
 
-        <h3>Usuários atuais</h3>
-        <ul>
-            {% for u in users %}
-            <li>{{ u }}</li>
-            {% endfor %}
-        </ul>
+    <label>Tipo:</label><br>
+    <select name="role">
+        <option value="user">Usuário comum</option>
+        <option value="admin">Administrador</option>
+    </select><br><br>
 
-        <a href="{{ url_for('logout') }}">Sair</a>
-        <p style="color:green;">{{ msg }}</p>
+    <input type="submit" value="Adicionar">
+    </form>
 
-    </body>
+    <!-- Remover usuário -->
+    <h3>Remover usuário</h3>
+    <form method="post" action="{{ url_for('login_bp.remove_user') }}">
+    <label>Usuário:</label><br>
+    <input type="text" name="user" required><br>
+    <input type="submit" value="Remover">
+    </form>
+
+    <!-- Alterar senha -->
+    <h3>Alterar senha</h3>
+    <form method="post" action="{{ url_for('login_bp.change_password') }}">
+    <label>Usuário:</label><br>
+    <input type="text" name="user" required><br>
+
+    <label>Nova senha:</label><br>
+    <input type="password" name="new_password" required><br>
+
+    <input type="submit" value="Alterar Senha">
+    </form>
+
+    <!-- Lista de usuários -->
+    <h3>Usuários atuais</h3>
+    <ul>
+    {% for u in users %}
+        <li>{{ u }}</li>
+    {% endfor %}
+    </ul>
+
+    {% if msg %}
+    <p style="color:green;">{{ msg }}</p>
+    {% endif %}
+</body>
 </html>
