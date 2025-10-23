@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Administrativo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        padding: 30px;
+        }
+        h1 {
+        color: #333;
+        }
+        .panel {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 400px;
+        }
+        a {
+        background: #0059ff;
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+        }
+        a:hover {
+        background: #003ec4;
+        }
+    </style>
+    </head>
+    <body>
+    <h1>Bem-vindo, administrador!</h1>
+
+    <div class="panel">
+        <h2>Gerenciar Voos</h2>
+        <a href="{{ url_for('flights_bp.flight_management') }}">✈️ Listar voos</a>
+        <a href="{{ url_for('flights_bp.add_flight') }}">➕ Adicionar voo</a>
+
+        <h2>Gerenciar Usuários</h2>
+        <a href="{{ url_for('login_bp.admin', user=session['user']) }}">👥 Listar usuários</a>
+        <form action="{{ url_for('login_bp.add_user') }}" method="get">
+        <button type="submit" disabled>➕ Adicionar usuário (via formulário)</button>
+        </form>
+
+        <h2>Conta</h2>
+        <a href="{{ url_for('login_bp.logout') }}">🚪 Sair</a>
+    </div>
+    </body>
+    </html>
