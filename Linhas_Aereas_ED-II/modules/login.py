@@ -4,7 +4,7 @@ from archives.data import users, adms
 login_bp = Blueprint("login_bp", __name__)
 
 # Rota de login
-@login_bp.route("/", methods=["GET", "POST"])
+@login_bp.route("/login", methods=["GET", "POST"])
 def login():
     erro = None
     if request.method == "POST":

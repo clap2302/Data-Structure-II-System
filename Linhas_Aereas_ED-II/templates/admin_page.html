@@ -67,6 +67,7 @@
     <a href="{{ url_for('login_bp.admin_dashboard') }}">⬅️ Voltar ao Painel</a> |
     <a href="{{ url_for('flights_bp.flight_management') }}">✈️ Gerenciar Voos</a> |
     <a href="{{ url_for('login_bp.logout') }}">🚪 Sair</a>
+    <a href="{{ url_for('home_bp.home') }}">Home</a>
     </div>
 
     <h2>Bem-vindo, {{ user }}!</h2>
@@ -121,5 +122,6 @@
     {% if msg %}
     <p style="color:green;">{{ msg }}</p>
     {% endif %}
+
 </body>
 </html>
