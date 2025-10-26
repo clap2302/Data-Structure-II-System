@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Cadastro de Usuário</title>
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -15,12 +15,12 @@
         margin: 0;
     }
 
-    .login-container {
+    .register-container {
         background-color: #fff;
         padding: 40px 50px;
         border-radius: 15px;
         box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        width: 320px;
+        width: 340px;
         text-align: center;
     }
 
@@ -68,58 +68,49 @@
         background-color: #003ec4;
     }
 
-    .error {
-        color: red;
-        font-weight: bold;
+    .back-link {
         margin-top: 15px;
+        font-size: 14px;
     }
 
-        .register-link {
-        margin-top: 20px;
-        font-size: 14px;
-        }
-
-        .register-link a {
+    .back-link a {
         color: #0059ff;
         text-decoration: none;
         font-weight: bold;
-        }
+    }
 
-        .register-link a:hover {
+    .back-link a:hover {
         text-decoration: underline;
-        }
+    }
+
+    .msg {
+        color: green;
+        margin-top: 10px;
+        font-weight: bold;
+    }
     </style>
 </head>
 
 <body>
-    <div class="login-container">
-    <h1>🔐 Login</h1>
-    <form method="post" action="{{ url_for('login_bp.login') }}">
+    <div class="register-container">
+    <h1>📝 Cadastro</h1>
+    <form method="POST" action="{{ url_for('login_bp.register') }}">
         <label for="user">Usuário:</label>
         <input type="text" id="user" name="user" required>
 
         <label for="password">Senha:</label>
         <input type="password" id="password" name="password" required>
 
-        <input type="submit" value="Entrar">
+        <input type="submit" value="Cadastrar">
     </form>
 
-    <div class="top-bar">
-        <a href="{{ url_for('home_bp.home') }}"><button>Home</button></a>
-    </div>
-
-    {% if erro %}
-        <p class="error">{{ erro }}</p>
+    {% if msg %}
+        <p class="msg">{{ msg }}</p>
     {% endif %}
 
-        <div class="register-link">
-        Não tem cadastro?
-        <a href="{{ url_for('login_bp.register_page') }}">Cadastre-se</a>.
-        </div>
-
-    <footer style="margin-top:15px; font-size:12px; color:#777;">
-        Sistema Linhas Aéreas ED-II ✈️
-    </footer>
+    <div class="back-link">
+        Já tem conta? <a href="{{ url_for('login_bp.login') }}">Voltar ao login</a>.
+    </div>
     </div>
 </body>
 </html>

@@ -84,3 +84,20 @@ def admin_dashboard():
     if session.get("role") != "admin":
         return "Acesso negado", 403
     return render_template("admin_dashboard.html")
+
+@login_bp.route("/register", methods=["POST"])
+def register():
+    user = request.form["user"]
+    password = request.form["password"]
+    msg = ""
+    if user in users:
+        msg = "Usuário já existe!"
+    else:
+        users[user] = password
+        msg = f"Usuário {user} adicionado!"
+
+    return render_template("register_page.html", user=user, users=users.keys(), msg=msg)
+
+@login_bp.route("/register_page", methods=["GET"])
+def register_page():
+    return render_template("register_page.html")
