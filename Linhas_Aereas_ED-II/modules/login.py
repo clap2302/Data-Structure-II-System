@@ -1,7 +1,10 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from archives.data import users, adms
+from archives.libs import BTreeBiblioteca
 
 login_bp = Blueprint("login_bp", __name__)
+
+btree = BTreeBiblioteca
 
 # Rota de login
 @login_bp.route("/login", methods=["GET", "POST"])
@@ -93,6 +96,7 @@ def register():
     if user in users:
         msg = "Usuário já existe!"
     else:
+        btree.Inserir()
         users[user] = password
         msg = f"Usuário {user} adicionado!"
 
