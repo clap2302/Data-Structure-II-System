@@ -1,0 +1,183 @@
+[
+    {
+      "codigo": "ED201",
+      "origem": "GRU",
+      "destino": "GIG",
+      "milhas": 225,
+      "preco": 389,
+      "aeronave": "Airbus A320",
+      "assentos": 180
+    },
+    {
+      "codigo": "ED202",
+      "origem": "SDU",
+      "destino": "BSB",
+      "milhas": 932,
+      "preco": 679,
+      "aeronave": "Boeing 737-800",
+      "assentos": 186
+    },
+    {
+      "codigo": "ED203",
+      "origem": "BSB",
+      "destino": "GRU",
+      "milhas": 873,
+      "preco": 610,
+      "aeronave": "Airbus A319",
+      "assentos": 144
+    },
+    {
+      "codigo": "ED204",
+      "origem": "GRU",
+      "destino": "SSA",
+      "milhas": 1450,
+      "preco": 899,
+      "aeronave": "Airbus A321",
+      "assentos": 220
+    },
+    {
+      "codigo": "ED205",
+      "origem": "SSA",
+      "destino": "REC",
+      "milhas": 675,
+      "preco": 520,
+      "aeronave": "Embraer E195",
+      "assentos": 118
+    },
+    {
+      "codigo": "ED206",
+      "origem": "REC",
+      "destino": "FOR",
+      "milhas": 629,
+      "preco": 480,
+      "aeronave": "Airbus A320",
+      "assentos": 180
+    },
+    {
+      "codigo": "ED207",
+      "origem": "FOR",
+      "destino": "BEL",
+      "milhas": 1340,
+      "preco": 850,
+      "aeronave": "Boeing 737-800",
+      "assentos": 186
+    },
+    {
+      "codigo": "ED208",
+      "origem": "BEL",
+      "destino": "BSB",
+      "milhas": 1600,
+      "preco": 920,
+      "aeronave": "Boeing 737 MAX 8",
+      "assentos": 175
+    },
+    {
+      "codigo": "ED209",
+      "origem": "CGH",
+      "destino": "CWB",
+      "milhas": 340,
+      "preco": 299,
+      "aeronave": "Airbus A319",
+      "assentos": 144
+    },
+    {
+      "codigo": "ED210",
+      "origem": "CWB",
+      "destino": "POA",
+      "milhas": 550,
+      "preco": 380,
+      "aeronave": "Embraer E190",
+      "assentos": 106
+    },
+    {
+      "codigo": "ED211",
+      "origem": "POA",
+      "destino": "GRU",
+      "milhas": 852,
+      "preco": 598,
+      "aeronave": "Boeing 737-700",
+      "assentos": 149
+    },
+    {
+      "codigo": "ED212",
+      "origem": "GRU",
+      "destino": "FLN",
+      "milhas": 488,
+      "preco": 420,
+      "aeronave": "Airbus A320",
+      "assentos": 180
+    },
+    {
+      "codigo": "ED213",
+      "origem": "FLN",
+      "destino": "CWB",
+      "milhas": 251,
+      "preco": 270,
+      "aeronave": "Embraer E195",
+      "assentos": 118
+    },
+    {
+      "codigo": "ED214",
+      "origem": "GRU",
+      "destino": "VIX",
+      "milhas": 721,
+      "preco": 540,
+      "aeronave": "Airbus A319",
+      "assentos": 144
+    },
+    {
+      "codigo": "ED215",
+      "origem": "VIX",
+      "destino": "SDU",
+      "milhas": 413,
+      "preco": 360,
+      "aeronave": "Boeing 737-700",
+      "assentos": 149
+    },
+    {
+      "codigo": "ED216",
+      "origem": "BSB",
+      "destino": "MAO",
+      "milhas": 1930,
+      "preco": 1250,
+      "aeronave": "Boeing 737 MAX 8",
+      "assentos": 175
+    },
+    {
+      "codigo": "ED217",
+      "origem": "MAO",
+      "destino": "BEL",
+      "milhas": 1290,
+      "preco": 890,
+      "aeronave": "Airbus A320neo",
+      "assentos": 186
+    },
+    {
+      "codigo": "ED218",
+      "origem": "GIG",
+      "destino": "SSA",
+      "milhas": 1210,
+      "preco": 780,
+      "aeronave": "Airbus A321",
+      "assentos": 220
+    },
+    {
+      "codigo": "ED219",
+      "origem": "CGH",
+      "destino": "SDU",
+      "milhas": 216,
+      "preco": 310,
+      "aeronave": "Embraer E195",
+      "assentos": 118
+    },
+    {
+      "codigo": "ED220",
+      "origem": "GRU",
+      "destino": "CNF",
+      "milhas": 490,
+      "preco": 415,
+      "aeronave": "Airbus A320",
+      "assentos": 180
+    }
+  ]
+  
