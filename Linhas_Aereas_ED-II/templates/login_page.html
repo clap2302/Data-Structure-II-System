@@ -15,6 +15,22 @@
         margin: 0;
     }
 
+    button {
+            background-color: #fff;
+            color: #0059ff;
+            padding: 5px 10px;
+            border: 2px solid #0059ff;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 15px;
+            transition: 0.3s;
+    }
+
+    button:hover{
+        background-color: #aaaaaa;
+    }
+
     .login-container {
         background-color: #fff;
         padding: 40px 50px;
@@ -104,10 +120,6 @@
         <input type="submit" value="Entrar">
     </form>
 
-    <div class="top-bar">
-        <a href="{{ url_for('home_bp.home') }}"><button>Home</button></a>
-    </div>
-
     {% if erro %}
         <p class="error">{{ erro }}</p>
     {% endif %}
@@ -115,11 +127,15 @@
         <div class="register-link">
         Não tem cadastro?
         <a href="{{ url_for('login_bp.register_page') }}">Cadastre-se</a>.
+        <div>
+        <a href="{{ url_for('home_bp.home') }}"><button>Home</button></a>
+        </div>
         </div>
 
     <footer style="margin-top:15px; font-size:12px; color:#777;">
         Sistema Linhas Aéreas ED-II ✈️
     </footer>
+
     </div>
 </body>
 </html>

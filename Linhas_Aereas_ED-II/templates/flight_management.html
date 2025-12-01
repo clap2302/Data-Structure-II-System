@@ -46,6 +46,7 @@
         <a href="{{ url_for('login_bp.admin_dashboard') }}">⬅️ Voltar ao painel administrativo</a>
     {% else %}
         <a href="{{ url_for('login_bp.logout') }}">🚪 Sair</a>
+        <a href="{{ url_for('home_bp.home') }}">🏠 Home</a>
     {% endif %}
     
     <h1>Lista de Voos</h1>
@@ -109,8 +110,5 @@
         {% endif %}
     </div>
     {% endif %}
-    <div class="top-bar">
-        <a href="{{ url_for('home_bp.home') }}">Home</a>
-    </div>
 </body>
 </html>

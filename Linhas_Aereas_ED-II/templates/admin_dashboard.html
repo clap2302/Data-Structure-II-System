@@ -41,9 +41,9 @@
         <a href="{{ url_for('flights_bp.add_flight') }}">➕ Adicionar voo</a>
 
         <h2>Gerenciar Usuários</h2>
-        <a href="{{ url_for('login_bp.admin', user=session['user']) }}">👥 Listar usuários</a>
+        <a href="{{ url_for('login_bp.admin', user=session['user']) }}">👥 Gerenciar usuários</a>
         <form action="{{ url_for('login_bp.add_user') }}" method="get">
-        <button type="submit" disabled>➕ Adicionar usuário (via formulário)</button>
+        <!-- <button type="submit" disabled>➕ Adicionar usuário (via formulário)</button> -->
         </form>
 
         <h2>Conta</h2>
