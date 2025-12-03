@@ -1,142 +1,224 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from archives.libs.btree_bib import BTree
+from modules.csv_manager import CSVManager
 
 login_bp = Blueprint("login_bp", __name__)
 
-users_tree = BTree(t=2)
+# Árvores primárias
+users_by_cpf = BTree(t=2)     # principal
+users_by_name = BTree(t=2)    # secundária
+
 admins_tree = BTree(t=2)
 
-# adm padrão
+# Carregar todos os usuários do CSV e preencher árvores
+all_users = CSVManager.get_users()
+
+for idx, user in enumerate(all_users):
+    csv_line = idx + 1
+
+    cpf = user["cpf"]
+    nome = user["name"]
+
+    users_by_cpf.insert(cpf, csv_line)
+    users_by_name.insert(nome, csv_line)
+
+# Admin padrão
 admins_tree.insert("admin", "1234")
 
-def get_all_users():
-    admins = [a for (a, _) in admins_tree.inorder()]
-    users = [u for (u, _) in users_tree.inorder()]
-    return admins + users
 
-# login normal
+# -----------------------
+# FUNÇÃO AUXILIAR
+# -----------------------
+
+def load_user_from_csv(line_number: int):
+    """Retorna o usuário correspondente à linha no CSV."""
+    users = CSVManager.get_users()
+    if 0 < line_number <= len(users):
+        return users[line_number - 1]
+    return None
+
+
+# -----------------------
+# LOGIN
+# -----------------------
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
     erro = None
 
     if request.method == "POST":
-        user = request.form["user"]
+        user_cpf = request.form["user"]       # Agora CPF
         password = request.form["password"]
 
-        # Login como usuário comum
-        result_user = users_tree.search(users_tree.root, user)
+        # ===== LOGIN COMO USUÁRIO COMUM =====
+        result_user = users_by_cpf.search(users_by_cpf.root, user_cpf)
         if result_user:
             node, idx = result_user
-            if node.values[idx] == password:
-                session["user"] = user
+            line_number = node.values[idx]   # posição no CSV
+            user_data = load_user_from_csv(line_number)
+
+            if user_data and user_data["password"] == password:
+                session["user"] = user_data["user"]
+                session["cpf"] = user_cpf
                 session["role"] = "user"
                 return redirect(url_for("flights_bp.flight_management"))
 
-        # Login como administrador
-        result_admin = admins_tree.search(admins_tree.root, user)
+        # ===== LOGIN COMO ADMIN =====
+        result_admin = admins_tree.search(admins_tree.root, user_cpf)
         if result_admin:
             node, idx = result_admin
             if node.values[idx] == password:
-                session["user"] = user
+                session["user"] = user_cpf
                 session["role"] = "admin"
                 return redirect(url_for("login_bp.admin_dashboard"))
 
-        erro = "Usuário ou senha incorretos"
+        # Se não encontrou nada
+        erro = "CPF ou senha incorretos"
 
     return render_template("login_page.html", erro=erro)
 
-# se logar um adm, entra aqui
+
+# -----------------------
+# PAINEL DE ADMIN
+# -----------------------
 @login_bp.route("/admin/<user>")
 def admin(user):
-    users_list = get_all_users()
+    users_list = CSVManager.get_users()
     return render_template("admin_page.html", user=user, users=users_list, msg="")
 
-# se logar um usuario comum, entra aqui
+
 @login_bp.route("/user/<user>")
 def user_page(user):
     return render_template("user_page.html", user=user)
 
 
-# funcoes para a pagina dos adms:
+# -----------------------
+# CRUD DE USUÁRIOS
+# -----------------------
 
 @login_bp.route("/add_user", methods=["POST"])
 def add_user():
+    name = request.form["name"]
+    cpf = request.form["cpf"]       # chave principal
     user = request.form["user"]
     password = request.form["password"]
     role = request.form["role"]
+    miles = 0
 
-    if users_tree.search(users_tree.root, user) or admins_tree.search(admins_tree.root, user):
+    # Impede duplicações
+    if users_by_cpf.search(users_by_cpf.root, cpf) or admins_tree.search(admins_tree.root, user):
         msg = "Usuário já existe!"
-    else:
-        if role == "user":
-            users_tree.insert(user, password)
-            msg = f"Usuário comum {user} adicionado!"
-        else:
-            admins_tree.insert(user, password)
-            msg = f"Administrador {user} adicionado!"
+        return render_template("admin_page.html", user="admin", users=CSVManager.get_users(), msg=msg)
 
-    return render_template("admin_page.html", user="admin", users=get_all_users(), msg=msg)
+    # Usuário comum
+    if role == "user":
+        line = CSVManager.add_user([name, user, password, cpf, miles])
+        users_by_cpf.insert(cpf, line)
+        users_by_name.insert(name, line)
+        msg = f"Usuário {user} adicionado!"
+
+    # Administrador
+    else:
+        admins_tree.insert(user, password)
+        msg = f"Administrador {user} adicionado!"
+
+    return render_template("admin_page.html", user="admin", users=CSVManager.get_users(), msg=msg)
+
 
 @login_bp.route("/remove_user", methods=["POST"])
 def remove_user():
-    user = request.form["user"]
+    cpf = request.form["cpf"]
 
-    if users_tree.search(users_tree.root, user):
-        users_tree.remove(user)
-        msg = f"Usuário comum {user} removido!"
-    elif admins_tree.search(admins_tree.root, user):
-        admins_tree.remove(user)
-        msg = f"Administrador {user} removido!"
-    else:
-        msg = "Usuário não existe!"
+    result = users_by_cpf.search(users_by_cpf.root, cpf)
+    if not result:
+        return render_template("admin_page.html", user="admin",
+                               users=CSVManager.get_users(),
+                               msg="Usuário não existe!")
 
-    return render_template("admin_page.html", user="admin", users=get_all_users(), msg=msg)
+    # **Remover das B-Trees**
+    node, idx = result
+    line_number = node.values[idx]
+
+    user_data = load_user_from_csv(line_number)
+    if not user_data:
+        return render_template("admin_page.html", user="admin",
+                               users=CSVManager.get_users(),
+                               msg="Erro ao localizar usuário.")
+
+    users_by_cpf.remove(cpf)
+    users_by_name.remove(user_data["name"])
+
+    # Remover do CSV (não implementado ainda)
+    msg = "Usuário removido das árvores (CSV ainda não é apagado)."
+
+    return render_template("admin_page.html", user="admin", users=CSVManager.get_users(), msg=msg)
+
 
 @login_bp.route("/change_password", methods=["POST"])
 def change_password():
-    user = request.form["user"]
-    nova_password = request.form["new_password"]
+    cpf = request.form["cpf"]
+    new_password = request.form["new_password"]
 
-    if users_tree.update_password(user, nova_password):
-        msg = f"Senha do usuário comum {user} alterada!"
-    elif admins_tree.update_password(user, nova_password):
-        msg = f"Senha do administrador {user} alterada!"
+    result = users_by_cpf.search(users_by_cpf.root, cpf)
+    if not result:
+        return render_template("admin_page.html", user="admin",
+                               users=CSVManager.get_users(),
+                               msg="Usuário não existe!")
+
+    node, idx = result
+    line_number = node.values[idx]
+    users = CSVManager.get_users()
+
+    if 0 < line_number <= len(users):
+        users[line_number - 1]["password"] = new_password
+        CSVManager.save_all_users(users)
+
+        msg = "Senha alterada com sucesso!"
     else:
-        msg = "Usuário não existe!"
+        msg = "Erro ao alterar senha!"
 
-    return render_template("admin_page.html", user="admin", users=get_all_users(), msg=msg)
+    return render_template("admin_page.html", user="admin", users=users, msg=msg)
 
+
+# -----------------------
+# LOGOUT
+# -----------------------
 @login_bp.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login_bp.login"))
 
-# rota pra acessar a pagina do adms (so pra quem se logar)
+
+# -----------------------
+# ADMIN DASHBOARD
+# -----------------------
 @login_bp.route("/admin_dashboard")
 def admin_dashboard():
     if session.get("role") != "admin":
         return "Acesso negado", 403
-
     return render_template("admin_dashboard.html")
 
 
-
-# para a pag dos usuarios comuns
-
+# -----------------------
+# REGISTRO RÁPIDO (usuário comum)
+# -----------------------
 @login_bp.route("/register", methods=["POST"])
 def register():
+    name = request.form["name"]
+    cpf = request.form["cpf"]
     user = request.form["user"]
     password = request.form["password"]
 
-    if users_tree.search(users_tree.root, user) or admins_tree.search(admins_tree.root, user):
-        msg = "Usuário já existe!"
+    if users_by_cpf.search(users_by_cpf.root, cpf):
+        msg = "CPF já registrado!"
     else:
-        users_tree.insert(user, password)
-        msg = f"Usuário {user} registrado!"
+        line = CSVManager.add_user([name, user, password, cpf, 0])
+        users_by_cpf.insert(cpf, line)
+        users_by_name.insert(name, line)
+        msg = "Registro concluído!"
 
-    return render_template("register_page.html", user=user, users=get_all_users(), msg=msg)
+    return render_template("register_page.html", msg=msg)
 
 
-@login_bp.route("/register_page", methods=["GET"])
+@login_bp.route("/register_page")
 def register_page():
     return render_template("register_page.html")
