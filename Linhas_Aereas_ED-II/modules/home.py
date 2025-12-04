@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session
-from archives.data import flights
+from modules.flight_manager import FlightManager
 
 home_bp = Blueprint("home_bp", __name__)
 
@@ -12,7 +12,9 @@ def home():
     if user_role == "user" and "reservations" in session:
         reservations = session["reservations"].get(user_name, [])
 
+    flights = FlightManager.load_flights_dict()
+
     return render_template(
         "home.html",
-        flights=flights,
+        flights=flights
     )

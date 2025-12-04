@@ -44,7 +44,7 @@ def flight_management():
 
     return render_template(
         "flight_management.html",
-        flights=flights,
+        flights=FlightManager.load_flights_dict(),
         role=user_role,
         reservations=user_reservations
     )
@@ -67,12 +67,12 @@ def add_flight():
             "origin": request.form["origin"],
             "destiny": request.form["destiny"],
             "miles": int(request.form["miles"]),
-            "ticket_price": float(request.form["ticket_price"]),     # OK
+            "ticket_price": float(request.form["ticket_price"]),
             "airplane_type": request.form["airplane_type"],
             "num_seats": int(request.form["num_seats"]),
             "reserved": 0,
-            "flight_datetime": request.form["flight_datetime"],      # OK
-            "duration": int(request.form["duration"])                # OK
+            "flight_datetime": request.form["flight_datetime"],
+            "duration": int(request.form["duration"])
         }
 
         FlightManager.save_flights_dict(flights)
@@ -131,10 +131,46 @@ def reserve_flight(flight_code):
         return "Acesso negado", 403
 
     user = session.get("user")
-
     if not user:
         return redirect(url_for("login_bp.login"))
 
-    ReservationManager.add_reservation(user, flight_code)
+    # Criar estrutura de reservas caso ainda não exista
+    if "reservations" not in session:
+        session["reservations"] = {}
+
+    user_reservations = session["reservations"].get(user, [])
+
+    # Evitar duplicar reserva
+    if flight_code in user_reservations:
+        return redirect(url_for("flights_bp.flight_management"))
+
+    # +=+=+=+=+=+ CARREGAR E ATUALIZAR JSON DE VOOS +=+=+=+=+=+
+    flights = FlightManager.load_flights_dict()
+
+    if flight_code not in flights:
+        return "Voo não encontrado", 404
+
+    flight = flights[flight_code]
+
+    # Verificar se ainda há assentos disponíveis
+    if flight["num_seats"] <= 0:
+        return "Não há mais assentos disponíveis neste voo.", 400
+
+    # Atualizar contadores de assentos
+    flight["num_seats"] -= 1
+    flight["reserved"] += 1
+
+    # Salvar alteração no dict
+    flights[flight_code] = flight
+
+    # Gravar novamente no arquivo JSON
+    FlightManager.save_flights_dict(flights)
+    # +=+=+=+=+=+ FIM DA ATUALIZAÇÃO DO JSON +=+=+=+=+=+
+
+    # Reserva do usuário
+    user_reservations.append(flight_code)
+    session["reservations"][user] = user_reservations
+    session.modified = True
 
     return redirect(url_for("flights_bp.flight_management"))
+

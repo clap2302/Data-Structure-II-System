@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <title>Linhas Aéreas ED2</title>
     <style>
-        /* ----------- ESTILOS GERAIS ----------- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
             margin: 0;
             padding: 0;
-            overflow: hidden; /* evita barra durante animação */
+            overflow: hidden;
         }
 
-        /* CORTINA QUE ESCONDE A PÁGINA */
+        /* Cortina animada */
         .cortina {
             position: fixed;
             top: 0;
@@ -27,11 +26,10 @@
         }
 
         @keyframes abrirCortina {
-            0%   { clip-path: inset(0 0 0 0); }
+            0% { clip-path: inset(0 0 0 0); }
             100% { clip-path: inset(0 0 0 100%); }
         }
 
-        /* CONTEÚDO REAL — aparece só no final */
         .conteudo {
             opacity: 0;
             animation: apareceTela 0.5s forwards;
@@ -40,10 +38,9 @@
 
         @keyframes apareceTela {
             from { opacity: 0; }
-            to   { opacity: 1; }
+            to { opacity: 1; }
         }
 
-        /* ----------- TÍTULO E LAYOUT ----------- */
         header {
             background-color: #0059ff;
             color: white;
@@ -52,12 +49,6 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.8em;
-            letter-spacing: 1px;
         }
 
         header a {
@@ -79,7 +70,7 @@
             padding: 40px 10%;
         }
 
-        /* ----------- TABELA DE VOOS ----------- */
+        /* Tabela */
         table {
             background: #fff;
             border-collapse: collapse;
@@ -105,19 +96,19 @@
             background-color: #f2f2f2;
         }
 
-        td a, td button {
-            text-decoration: none;
+        /* Botões */
+        td button, td a {
             background: #0059ff;
             color: white;
             padding: 8px 14px;
             border-radius: 5px;
             border: none;
+            text-decoration: none;
             cursor: pointer;
             transition: background 0.3s ease;
-            font-size: 0.9em;
         }
 
-        td a:hover, td button:hover {
+        td button:hover, td a:hover {
             background: #003ebf;
         }
 
@@ -128,33 +119,9 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             font-size: 1.2em;
-            color: #333;
         }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #555;
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 768px) {
-            main {
-                padding: 20px;
-            }
-
-            table {
-                font-size: 0.9em;
-            }
-
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-        }
-
-        /* ----------- AVIÃO E ANIMAÇÃO ----------- */
+        /* Avião animado */
         .aviao {
             position: fixed;
             width: 480px;
@@ -165,55 +132,56 @@
         }
 
         @keyframes voar {
-            0% {
-                transform: translateX(0) translateY(0) rotate(0deg);
-            }
-            100% {
-                transform: translateX(140vw) translateY(-75vh) rotate(10deg);
-            }
+            0% { transform: translateX(0) translateY(0) rotate(0deg); }
+            100% { transform: translateX(140vw) translateY(-75vh) rotate(10deg); }
         }
     </style>
 </head>
 
 <body>
-    <!-- AVIÃO -->
+
     <img src="{{ url_for('static', filename='airplane.png') }}" class="aviao">
 
-    <!-- CORTINA QUE REVELA A PÁGINA -->
     <div class="cortina"></div>
 
-    <!-- CONTEÚDO REAL -->
     <div class="conteudo">
         <header>
-            <h1>Linhas Aéreas ED-II </h1>
+            <h1>Linhas Aéreas ED-II</h1>
             <a href="{{ url_for('login_bp.login') }}">Login</a>
         </header>
 
         <main>
             {% if flights %}
             <h2>Voos disponíveis:</h2>
+
             <table>
                 <tr>
                     <th>Código</th>
                     <th>Origem</th>
                     <th>Destino</th>
-                    <th>Milhas</th>
+                    <th>Data/Hora</th>
+                    <th>Duração</th>
                     <th>Preço</th>
-                    <th>Tipo de Avião</th>
                     <th>Assentos</th>
+                    <th>Reservados</th>
+                    <th>Disponíveis</th>
                 </tr>
+
                 {% for code, f in flights.items() %}
                 <tr>
                     <td>{{ code }}</td>
                     <td>{{ f.origin }}</td>
                     <td>{{ f.destiny }}</td>
-                    <td>{{ f.miles }}</td>
+                    <td>{{ f.flight_datetime }}</td>
+                    <td>{{ f.duration }}</td>
                     <td>R$ {{ f.ticket_price }}</td>
-                    <td>{{ f.airplane_type }}</td>
                     <td>{{ f.num_seats }}</td>
+                    <td>{{ f.reserved }}</td>
+                    <td>{{ f.num_seats - f.reserved }}</td>
                 </tr>
                 {% endfor %}
             </table>
+
             {% else %}
                 <div class="no-flights">
                     🚀 Nenhum voo cadastrado ainda.<br>
@@ -223,7 +191,7 @@
         </main>
 
         <footer>
-            © 2025 Sistema de Vendas de Passagens — Linhas Aéreas ED-II — Conectando você ao destino dos seus sonhos ✈️
+            © 2025 Sistema de Passagens — Linhas Aéreas ED-II ✈️
         </footer>
     </div>
 </body>
