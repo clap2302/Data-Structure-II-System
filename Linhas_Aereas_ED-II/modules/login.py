@@ -38,6 +38,22 @@ def load_user_from_csv(line_number: int):
     return None
 
 
+def reload_trees():
+    global users_by_cpf, users_by_name
+
+    # recria as árvores vazias
+    users_by_cpf = BTree(t=2)
+    users_by_name = BTree(t=2)
+
+    # recarrega todos os usuários do CSV
+    all_users = CSVManager.get_users()
+
+    for idx, user in enumerate(all_users):
+        line = idx + 1   # linha real no CSV
+        users_by_cpf.insert(user["cpf"], line)
+        users_by_name.insert(user["name"], line)
+
+
 # -----------------------
 # LOGIN
 # -----------------------
@@ -45,8 +61,10 @@ def load_user_from_csv(line_number: int):
 def login():
     erro = None
 
+    reload_trees()
+
     if request.method == "POST":
-        user_cpf = request.form["user"]       # Agora CPF
+        user_cpf = request.form["cpf"]       # Agora CPF
         password = request.form["password"]
 
         # ===== LOGIN COMO USUÁRIO COMUM =====
@@ -126,6 +144,7 @@ def add_user():
 
 @login_bp.route("/remove_user", methods=["POST"])
 def remove_user():
+    reload_trees()
     cpf = request.form["cpf"]
 
     result = users_by_cpf.search(users_by_cpf.root, cpf)
@@ -134,7 +153,6 @@ def remove_user():
                                users=CSVManager.get_users(),
                                msg="Usuário não existe!")
 
-    # **Remover das B-Trees**
     node, idx = result
     line_number = node.values[idx]
 
@@ -142,15 +160,23 @@ def remove_user():
     if not user_data:
         return render_template("admin_page.html", user="admin",
                                users=CSVManager.get_users(),
-                               msg="Erro ao localizar usuário.")
+                               msg="Erro ao localizar usuário no CSV.")
 
+    # Remover das árvores
     users_by_cpf.remove(cpf)
     users_by_name.remove(user_data["name"])
 
-    # Remover do CSV (não implementado ainda)
-    msg = "Usuário removido das árvores (CSV ainda não é apagado)."
+    # Remover do CSV
+    removed = CSVManager.remove_user(cpf)
 
-    return render_template("admin_page.html", user="admin", users=CSVManager.get_users(), msg=msg)
+    if removed:
+        msg = f"Usuário {user_data['name']} removido com sucesso!"
+    else:
+        msg = "Erro ao remover do CSV."
+
+    return render_template("admin_page.html", user="admin",
+                           users=CSVManager.get_users(),
+                           msg=msg)
 
 
 @login_bp.route("/change_password", methods=["POST"])
@@ -192,36 +218,86 @@ def search_user_by_name():
     nome = request.args.get("nome", "").strip()
 
     if not nome:
-        return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Digite um nome para buscar.")
+        return render_template(
+            "admin_dashboard.html",
+            user="admin",
+            users=CSVManager.get_users(),
+            msg="Digite um nome para buscar."
+        )
 
-    # busca entre usuários
-    result_user = users_tree.search(users_tree.root, nome)
+    # Busca entre usuários comuns
+    result_user = users_by_name.search(users_by_name.root, nome)
     if result_user:
-        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"Usuário encontrado: {nome}")
+        node, idx = result_user
+        line_number = node.values[idx]
+        usuario = load_user_from_csv(line_number)
 
-    # busca entre administradores
+        return render_template(
+            "admin_page.html",
+            user="admin",
+            users=[usuario],
+            msg=f"Usuário encontrado: {usuario['name']}"
+        )
+
+    # Busca entre administradores
     result_admin = admins_tree.search(admins_tree.root, nome)
     if result_admin:
-        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"Administrador encontrado: {nome}")
+        return render_template(
+            "admin_page.html",
+            user="admin",
+            users=[{"name": nome, "user": nome, "cpf": "-", "miles": "-"}],
+            msg=f"Administrador encontrado: {nome}"
+        )
 
-    return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Nenhum usuário encontrado com esse nome.")
+    return render_template(
+        "admin_page.html",
+        user="admin",
+        users=CSVManager.get_users(),
+        msg="Nenhum usuário encontrado com esse nome."
+    )
 
 @login_bp.route("/search_user_by_cpf")
 def search_user_by_cpf():
     cpf = request.args.get("cpf", "").strip()
 
     if not cpf:
-        return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Digite um CPF para buscar.")
+        return render_template(
+            "admin_page.html",
+            user="admin",
+            users=CSVManager.get_users(),
+            msg="Digite um CPF para buscar."
+        )
 
-    result_user = users_tree.search(users_tree.root, cpf)
+    # Busca entre usuários comuns
+    result_user = users_by_cpf.search(users_by_cpf.root, cpf)
     if result_user:
-        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"CPF encontrado: {cpf}")
+        node, idx = result_user
+        line_number = node.values[idx]
+        usuario = load_user_from_csv(line_number)
 
+        return render_template(
+            "admin_page.html",
+            user="admin",
+            users=[usuario],
+            msg=f"CPF encontrado: {usuario['cpf']}"
+        )
+
+    # Busca entre administradores
     result_admin = admins_tree.search(admins_tree.root, cpf)
-    if result_admins:
-        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"CPF encontrado: {cpf}")
+    if result_admin:
+        return render_template(
+            "admin_page.html",
+            user="admin",
+            users=[{"name": cpf, "user": cpf, "cpf": cpf, "miles": "-"}],
+            msg=f"CPF encontrado: {cpf}"
+        )
 
-    return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Nenhum usuário encontrado com esse CPF.")
+    return render_template(
+        "admin_page.html",
+        user="admin",
+        users=CSVManager.get_users(),
+        msg="Nenhum usuário encontrado com esse CPF."
+    )
 
 
 

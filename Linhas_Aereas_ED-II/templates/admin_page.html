@@ -59,6 +59,25 @@
     .top-links {
         margin-bottom: 20px;
     }
+
+    .user-card {
+        background: #ffffff;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .user-field {
+        margin: 2px 0;
+        font-size: 14px;
+    }
+
+    .user-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
     </style>
 </head>
 
@@ -76,6 +95,13 @@
     <!-- Adicionar usuário -->
     <h3>Adicionar usuário</h3>
     <form method="post" action="{{ url_for('login_bp.add_user') }}">
+    
+    <label>Nome:</label><br>
+    <input type="text" name="name" required><br>
+
+    <label>CPF:</label><br>
+    <input type="text" name="cpf" required><br>
+
     <label>Usuário:</label><br>
     <input type="text" name="user" required><br>
 
@@ -94,8 +120,8 @@
     <!-- Remover usuário -->
     <h3>Remover usuário</h3>
     <form method="post" action="{{ url_for('login_bp.remove_user') }}">
-    <label>Usuário:</label><br>
-    <input type="text" name="user" required><br>
+    <label>CPF:</label><br>
+    <input type="text" name="cpf" required><br>
     <input type="submit" value="Remover">
     </form>
 
@@ -111,16 +137,45 @@
     <input type="submit" value="Alterar Senha">
     </form>
 
-    <!-- Lista de usuários -->
-    <h3>Usuários atuais</h3>
-    <ul>
-    {% for u in users %}
-        <li>{{ u }}</li>
-    {% endfor %}
-    </ul>
+    <h3>Buscar usuário por nome</h3>
+        <form action="{{ url_for('login_bp.search_user_by_name') }}" method="get">
+            <input type="text" name="nome" placeholder="Digite o nome do usuário">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <h3>Buscar usuário por CPF</h3>
+        <form action="{{ url_for('login_bp.search_user_by_cpf') }}" method="get">
+            <input type="text" name="cpf" placeholder="Digite o CPF do usuário">
+            <button type="submit">Buscar</button>
+        </form>
 
     {% if msg %}
     <p style="color:green;">{{ msg }}</p>
+    {% endif %}
+
+    <!-- Lista de usuários -->
+    <h3>Usuários</h3>
+
+    {% if users %}
+        {% for u in users %}
+        <div class="user-card">
+            <div class="user-name">{{ u.name }}</div>
+
+            {% if u.user %}
+            <div class="user-field"><strong>Usuário:</strong> {{ u.user }}</div>
+            {% endif %}
+
+            {% if u.cpf %}
+            <div class="user-field"><strong>CPF:</strong> {{ u.cpf }}</div>
+            {% endif %}
+
+            {% if u.miles %}
+            <div class="user-field"><strong>Milhas:</strong> {{ u.miles }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Nenhum usuário cadastrado.</p>
     {% endif %}
 
 </body>

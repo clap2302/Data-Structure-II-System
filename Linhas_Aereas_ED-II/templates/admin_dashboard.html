@@ -116,18 +116,6 @@
         <a href="{{ url_for('login_bp.admin', user=session['user']) }}">👥 Gerenciar usuários</a>
         <form action="{{ url_for('login_bp.add_user') }}" method="get">
         </form>
-
-        <h3>Buscar por nome</h3>
-        <form action="{{ url_for('login_bp.search_user_by_name') }}" method="get">
-            <input type="text" name="nome" placeholder="Digite o nome do usuário">
-            <button type="submit">Buscar</button>
-        </form>
-
-        <h3>Buscar por CPF</h3>
-        <form action="{{ url_for('login_bp.search_user_by_cpf') }}" method="get">
-            <input type="text" name="nome" placeholder="Digite o CPF do usuário">
-            <button type="submit">Buscar</button>
-        </form>
         
     </div>
 
