@@ -1,183 +1,242 @@
 [
-    {
-      "codigo": "ED201",
-      "origem": "GRU",
-      "destino": "GIG",
-      "milhas": 225,
-      "preco": 389,
-      "aeronave": "Airbus A320",
-      "assentos": 180
-    },
-    {
-      "codigo": "ED202",
-      "origem": "SDU",
-      "destino": "BSB",
-      "milhas": 932,
-      "preco": 679,
-      "aeronave": "Boeing 737-800",
-      "assentos": 186
-    },
-    {
-      "codigo": "ED203",
-      "origem": "BSB",
-      "destino": "GRU",
-      "milhas": 873,
-      "preco": 610,
-      "aeronave": "Airbus A319",
-      "assentos": 144
-    },
-    {
-      "codigo": "ED204",
-      "origem": "GRU",
-      "destino": "SSA",
-      "milhas": 1450,
-      "preco": 899,
-      "aeronave": "Airbus A321",
-      "assentos": 220
-    },
-    {
-      "codigo": "ED205",
-      "origem": "SSA",
-      "destino": "REC",
-      "milhas": 675,
-      "preco": 520,
-      "aeronave": "Embraer E195",
-      "assentos": 118
-    },
-    {
-      "codigo": "ED206",
-      "origem": "REC",
-      "destino": "FOR",
-      "milhas": 629,
-      "preco": 480,
-      "aeronave": "Airbus A320",
-      "assentos": 180
-    },
-    {
-      "codigo": "ED207",
-      "origem": "FOR",
-      "destino": "BEL",
-      "milhas": 1340,
-      "preco": 850,
-      "aeronave": "Boeing 737-800",
-      "assentos": 186
-    },
-    {
-      "codigo": "ED208",
-      "origem": "BEL",
-      "destino": "BSB",
-      "milhas": 1600,
-      "preco": 920,
-      "aeronave": "Boeing 737 MAX 8",
-      "assentos": 175
-    },
-    {
-      "codigo": "ED209",
-      "origem": "CGH",
-      "destino": "CWB",
-      "milhas": 340,
-      "preco": 299,
-      "aeronave": "Airbus A319",
-      "assentos": 144
-    },
-    {
-      "codigo": "ED210",
-      "origem": "CWB",
-      "destino": "POA",
-      "milhas": 550,
-      "preco": 380,
-      "aeronave": "Embraer E190",
-      "assentos": 106
-    },
-    {
-      "codigo": "ED211",
-      "origem": "POA",
-      "destino": "GRU",
-      "milhas": 852,
-      "preco": 598,
-      "aeronave": "Boeing 737-700",
-      "assentos": 149
-    },
-    {
-      "codigo": "ED212",
-      "origem": "GRU",
-      "destino": "FLN",
-      "milhas": 488,
-      "preco": 420,
-      "aeronave": "Airbus A320",
-      "assentos": 180
-    },
-    {
-      "codigo": "ED213",
-      "origem": "FLN",
-      "destino": "CWB",
-      "milhas": 251,
-      "preco": 270,
-      "aeronave": "Embraer E195",
-      "assentos": 118
-    },
-    {
-      "codigo": "ED214",
-      "origem": "GRU",
-      "destino": "VIX",
-      "milhas": 721,
-      "preco": 540,
-      "aeronave": "Airbus A319",
-      "assentos": 144
-    },
-    {
-      "codigo": "ED215",
-      "origem": "VIX",
-      "destino": "SDU",
-      "milhas": 413,
-      "preco": 360,
-      "aeronave": "Boeing 737-700",
-      "assentos": 149
-    },
-    {
-      "codigo": "ED216",
-      "origem": "BSB",
-      "destino": "MAO",
-      "milhas": 1930,
-      "preco": 1250,
-      "aeronave": "Boeing 737 MAX 8",
-      "assentos": 175
-    },
-    {
-      "codigo": "ED217",
-      "origem": "MAO",
-      "destino": "BEL",
-      "milhas": 1290,
-      "preco": 890,
-      "aeronave": "Airbus A320neo",
-      "assentos": 186
-    },
-    {
-      "codigo": "ED218",
-      "origem": "GIG",
-      "destino": "SSA",
-      "milhas": 1210,
-      "preco": 780,
-      "aeronave": "Airbus A321",
-      "assentos": 220
-    },
-    {
-      "codigo": "ED219",
-      "origem": "CGH",
-      "destino": "SDU",
-      "milhas": 216,
-      "preco": 310,
-      "aeronave": "Embraer E195",
-      "assentos": 118
-    },
-    {
-      "codigo": "ED220",
-      "origem": "GRU",
-      "destino": "CNF",
-      "milhas": 490,
-      "preco": 415,
-      "aeronave": "Airbus A320",
-      "assentos": 180
-    }
-  ]
-  
+  {
+    "code": "ED201",
+    "origin": "GRU",
+    "destiny": "GIG",
+    "miles": 225,
+    "price": 389,
+    "airplane_type": "Airbus A320",
+    "num_seats": 180,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 00:00",
+    "duration_minutes": 70
+  },
+  {
+    "code": "ED202",
+    "origin": "SDU",
+    "destiny": "BSB",
+    "miles": 932,
+    "price": 679,
+    "airplane_type": "Boeing 737-800",
+    "num_seats": 186,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 01:30",
+    "duration_minutes": 130
+  },
+  {
+    "code": "ED203",
+    "origin": "BSB",
+    "destiny": "GRU",
+    "miles": 873,
+    "price": 610,
+    "airplane_type": "Airbus A319",
+    "num_seats": 144,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 03:00",
+    "duration_minutes": 130
+  },
+  {
+    "code": "ED204",
+    "origin": "GRU",
+    "destiny": "SSA",
+    "miles": 1450,
+    "price": 899,
+    "airplane_type": "Airbus A321",
+    "num_seats": 220,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 04:30",
+    "duration_minutes": 150
+  },
+  {
+    "code": "ED205",
+    "origin": "SSA",
+    "destiny": "REC",
+    "miles": 675,
+    "price": 520,
+    "airplane_type": "Embraer E195",
+    "num_seats": 118,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 06:00",
+    "duration_minutes": 95
+  },
+  {
+    "code": "ED206",
+    "origin": "REC",
+    "destiny": "FOR",
+    "miles": 629,
+    "price": 480,
+    "airplane_type": "Airbus A320",
+    "num_seats": 180,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 07:30",
+    "duration_minutes": 90
+  },
+  {
+    "code": "ED207",
+    "origin": "FOR",
+    "destiny": "BEL",
+    "miles": 1340,
+    "price": 850,
+    "airplane_type": "Boeing 737-800",
+    "num_seats": 186,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 09:00",
+    "duration_minutes": 145
+  },
+  {
+    "code": "ED208",
+    "origin": "BEL",
+    "destiny": "BSB",
+    "miles": 1600,
+    "price": 920,
+    "airplane_type": "Boeing 737 MAX 8",
+    "num_seats": 175,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 10:30",
+    "duration_minutes": 180
+  },
+  {
+    "code": "ED209",
+    "origin": "CGH",
+    "destiny": "CWB",
+    "miles": 340,
+    "price": 299,
+    "airplane_type": "Airbus A319",
+    "num_seats": 144,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 12:00",
+    "duration_minutes": 90
+  },
+  {
+    "code": "ED210",
+    "origin": "CWB",
+    "destiny": "POA",
+    "miles": 550,
+    "price": 380,
+    "airplane_type": "Embraer E190",
+    "num_seats": 106,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 13:30",
+    "duration_minutes": 85
+  },
+  {
+    "code": "ED211",
+    "origin": "POA",
+    "destiny": "GRU",
+    "miles": 852,
+    "price": 598,
+    "airplane_type": "Boeing 737-700",
+    "num_seats": 149,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 15:00",
+    "duration_minutes": 120
+  },
+  {
+    "code": "ED212",
+    "origin": "GRU",
+    "destiny": "FLN",
+    "miles": 488,
+    "price": 420,
+    "airplane_type": "Airbus A320",
+    "num_seats": 180,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 16:30",
+    "duration_minutes": 90
+  },
+  {
+    "code": "ED213",
+    "origin": "FLN",
+    "destiny": "CWB",
+    "miles": 251,
+    "price": 270,
+    "airplane_type": "Embraer E195",
+    "num_seats": 118,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 18:00",
+    "duration_minutes": 60
+  },
+  {
+    "code": "ED214",
+    "origin": "GRU",
+    "destiny": "VIX",
+    "miles": 721,
+    "price": 540,
+    "airplane_type": "Airbus A319",
+    "num_seats": 144,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 19:30",
+    "duration_minutes": 100
+  },
+  {
+    "code": "ED215",
+    "origin": "VIX",
+    "destiny": "SDU",
+    "miles": 413,
+    "price": 360,
+    "airplane_type": "Boeing 737-700",
+    "num_seats": 149,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 21:00",
+    "duration_minutes": 75
+  },
+  {
+    "code": "ED216",
+    "origin": "BSB",
+    "destiny": "MAO",
+    "miles": 1930,
+    "price": 1250,
+    "airplane_type": "Boeing 737 MAX 8",
+    "num_seats": 175,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-25 22:30",
+    "duration_minutes": 200
+  },
+  {
+    "code": "ED217",
+    "origin": "MAO",
+    "destiny": "BEL",
+    "miles": 1290,
+    "price": 890,
+    "airplane_type": "Airbus A320neo",
+    "num_seats": 186,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-26 00:00",
+    "duration_minutes": 140
+  },
+  {
+    "code": "ED218",
+    "origin": "GIG",
+    "destiny": "SSA",
+    "miles": 1210,
+    "price": 780,
+    "airplane_type": "Airbus A321",
+    "num_seats": 220,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-26 01:30",
+    "duration_minutes": 135
+  },
+  {
+    "code": "ED219",
+    "origin": "CGH",
+    "destiny": "SDU",
+    "miles": 216,
+    "price": 310,
+    "airplane_type": "Embraer E195",
+    "num_seats": 118,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-26 03:00",
+    "duration_minutes": 60
+  },
+  {
+    "code": "ED220",
+    "origin": "GRU",
+    "destiny": "CNF",
+    "miles": 490,
+    "price": 415,
+    "airplane_type": "Airbus A320",
+    "num_seats": 180,
+    "reserved_seats": 0,
+    "departure_datetime": "2025-12-26 04:30",
+    "duration_minutes": 90
+  }
+]
