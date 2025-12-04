@@ -6,8 +6,8 @@
     "miles": 225,
     "price": 389.0,
     "airplane_type": "Airbus A320",
-    "num_seats": 179,
-    "reserved_seats": 1,
+    "num_seats": 178,
+    "reserved_seats": 2,
     "departure_datetime": "2025-12-25 00:00",
     "duration_minutes": 70
   },
@@ -18,8 +18,8 @@
     "miles": 932,
     "price": 679.0,
     "airplane_type": "Boeing 737-800",
-    "num_seats": 185,
-    "reserved_seats": 1,
+    "num_seats": 184,
+    "reserved_seats": 2,
     "departure_datetime": "2025-12-25 01:30",
     "duration_minutes": 130
   },

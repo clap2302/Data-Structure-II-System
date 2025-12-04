@@ -102,6 +102,7 @@ def login():
 @login_bp.route("/admin/<user>")
 def admin(user):
     users_list = CSVManager.get_users()
+
     return render_template("admin_page.html", user=user, users=users_list, msg="")
 
 
@@ -214,6 +215,45 @@ def change_password():
 def logout():
     session.clear()
     return redirect(url_for("login_bp.login"))
+
+@login_bp.route("/list_by", methods=["POST"])
+def list_by():
+    if request.method == "POST":
+        criterio = request.form["list_by"]
+
+        # sempre recarrega o CSV atualizado
+        all_users = CSVManager.get_users()
+        users = []
+
+        if criterio == "list_name":
+            # inorder: retorna pares (key, line_number)
+            name_btree_in_order = users_by_name.inorder()
+
+            for key, line in name_btree_in_order:
+                users.append(all_users[line - 1])   # linha correta no CSV
+
+            return render_template("admin_page.html",
+                                   user="admin",
+                                   users=users,
+                                   msg="Listando por Nome (A → Z)")
+
+        elif criterio == "list_cpf":
+            cpf_btree_in_order = users_by_cpf.inorder()
+
+            for key, line in cpf_btree_in_order:
+                users.append(all_users[line - 1])
+
+            return render_template("admin_page.html",
+                                   user="admin",
+                                   users=users,
+                                   msg="Listando por CPF")
+
+        # caso caia aqui
+        return render_template("admin_page.html",
+                               user="admin",
+                               users=all_users,
+                               msg="Critério inválido")
+
 
 @login_bp.route("/search_user_by_name")
 def search_user_by_name():

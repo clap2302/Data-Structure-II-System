@@ -149,12 +149,22 @@
             <button type="submit">Buscar</button>
         </form>
 
+    <!-- Lista de usuários -->
+    <h3>Usuários</h3>
+
+    <form method="post" action="{{ url_for('login_bp.list_by') }}">
+        <label>Listar por:</label><br>
+        <select name="list_by">
+            <option>Selecione</option>
+            <option value="list_cpf">CPF</option>
+            <option value="list_name">Nome</option>
+        </select><br>
+        <input type="submit" value="Listar">
+    </form>
+
     {% if msg %}
     <p style="color:green;">{{ msg }}</p>
     {% endif %}
-
-    <!-- Lista de usuários -->
-    <h3>Usuários</h3>
 
     {% if users %}
         {% for u in users %}
