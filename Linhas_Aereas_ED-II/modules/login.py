@@ -24,6 +24,7 @@ for idx, user in enumerate(all_users):
 
 # Admin padrão
 admins_tree.insert("admin", "1234")
+admins_tree.insert("1234", "abcd")
 
 
 # -----------------------
@@ -139,6 +140,7 @@ def add_user():
         admins_tree.insert(user, password)
         msg = f"Administrador {user} adicionado!"
 
+    reload_trees()
     return render_template("admin_page.html", user="admin", users=CSVManager.get_users(), msg=msg)
 
 

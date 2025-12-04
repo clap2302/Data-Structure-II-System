@@ -80,6 +80,8 @@
             <th>Assentos</th>
             <th>Reservados</th>
             <th>Disponíveis</th>
+            <th>Data/Hora</th>
+            <th>Duração em minutos</th>
             <th>Ações</th>
         </tr>
 
@@ -94,6 +96,8 @@
             <td>{{ f.num_seats }}</td>
             <td>{{ f.reserved }}</td>
             <td>{{ f.num_seats - f.reserved }}</td>
+            <td>{{ f.flight_datetime }}</td>
+            <td>{{ f.duration }}</td>
 
             <td>
                 {% if role == "admin" %}
