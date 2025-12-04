@@ -111,6 +111,45 @@ def logout():
     session.clear()
     return redirect(url_for("login_bp.login"))
 
+@login_bp.route("/search_user_by_name")
+def search_user_by_name():
+    nome = request.args.get("nome", "").strip()
+
+    if not nome:
+        return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Digite um nome para buscar.")
+
+    # busca entre usuários
+    result_user = users_tree.search(users_tree.root, nome)
+    if result_user:
+        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"Usuário encontrado: {nome}")
+
+    # busca entre administradores
+    result_admin = admins_tree.search(admins_tree.root, nome)
+    if result_admin:
+        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"Administrador encontrado: {nome}")
+
+    return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Nenhum usuário encontrado com esse nome.")
+
+@login_bp.route("/search_user_by_cpf")
+def search_user_by_cpf():
+    cpf = request.args.get("cpf", "").strip()
+
+    if not cpf:
+        return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Digite um CPF para buscar.")
+
+    result_user = users_tree.search(users_tree.root, cpf)
+    if result_user:
+        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"CPF encontrado: {cpf}")
+
+    result_admin = admins_tree.search(admins_tree.root, cpf)
+    if result_admins:
+        return render_template("admin_dashboard.html", user="admin", users=[nome], msg=f"CPF encontrado: {cpf}")
+
+    return render_template("admin_dashboard.html", user="admin", users=get_all_users(), msg="Nenhum usuário encontrado com esse CPF.")
+
+
+
+
 # rota pra acessar a pagina do adms (so pra quem se logar)
 @login_bp.route("/admin_dashboard")
 def admin_dashboard():
