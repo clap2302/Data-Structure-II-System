@@ -1,69 +1,218 @@
+# Import para pegar os dict's de vôos
+from modules.flight_manager import FlightManager
+
+# libs para mostrar as rotas no mapara
+import folium
+from folium.plugins import AntPath
+
+# lib para pegar as longitudes e latitudes
+from airportsdata import load
+
+# lib dos grafos
 from igraph import *
 
+# para calculcar a distância baseada na longitude e latitude
+from math import radians, sin, cos, sqrt, atan2
+
+
 class Routes_Graph:
-    def __init__(self, flights: list[dict]):
+    def __init__(self):
         self.graph = Graph(directed=True)
-        self.flifhts = flights
+        self.flights = FlightManager.load_flights_dict()
+        self.airports_db = load("IATA")
 
-        # 1. Pegar a lista de aeroportos que se tem dentro da lista
+        # --- Coleta os nomdes dos aeroportos ---
+        airport_names = (
+            {f["origin"] for f in self.flights} |
+            {f["destination"] for f in self.flights}
+        )
+        airport_names = list(airport_names)
 
-        # 2. Criar as arestas
+        # cria vértices
+        self.graph.add_vertices(len(airport_names))
+        self.index_of = {airport_names[i]: i for i in range(len(airport_names))}
 
-        # 3. Atribuir os pesos
+        # define o nome e a label de cada vértice
+        for i, name in enumerate(airport_names):
+            self.graph.vs[i]["name"] = name
+            self.graph.vs[i]["label"] = name
 
-    def add_vertice(self, vertice: dict):
-        pass
+        # --- Criar as arestas ---
+        edges = []
+        weights = []
 
-    def remove_vertice(self):
-        pass
+        for f in self.flights:
+            o = f["origin"]
+            d = f["destination"]
 
-    
+            o_idx = self.index_of[o]
+            d_idx = self.index_of[d]
+
+            if o not in self.airports_db or d not in self.airports_db:
+                continue  # pula aeroportos desconhecidos
+
+            # pega as coordenadas de cada aeroporto
+            a1 = self.airports_db[o]
+            a2 = self.airports_db[d]
+
+            distance = haversine(a1["lat"], a1["lon"], a2["lat"], a2["lon"])
+
+            edges.append((o_idx, d_idx))
+            weights.append(distance)
+
+        self.graph.add_edges(edges)
+        self.graph.es["weight"] = weights
+
+
+    '''
+        Adiciona vértice
+    '''
+    def add_vertice(self, vertice_id: str):
+        """
+        vertice_id = "GRU"
+        """
+        name = vertice_id.upper()
+
+        if name in self.graph.vs["name"]:
+            return  # já existe
+
+        self.graph.add_vertex(name=name, label=name)
+        self.index_of[name] = len(self.graph.vs) - 1
+
+    '''
+        Remove vértice
+    '''
+    def remove_vertice(self, vertice_id: str):
+        """
+        vertice_id = "GRU"
+        """
+        name = vertice_id.upper()
+
+        if name not in self.graph.vs["name"]:
+            return
+
+        idx = self.graph.vs.find(name=name).index
+        self.graph.delete_vertices(idx)
+
+        # importante: precisamos remover também do index_of
+        if name in self.index_of:
+            del self.index_of[name]
+
+    '''
+        Adiciona Edge
+    '''
+    def add_edge(self, edge: dict):
+        """
+        edge = {
+            "origin": "GRU",
+            "destination": "LAX",
+            ...
+        }
+        """
+        o = edge["origin"]
+        d = edge["destination"]
+
+        # garantir que os vértices existem
+        if o not in self.graph.vs["name"]:
+            self.add_vertice({"name": o})
+        if d not in self.graph.vs["name"]:
+            self.add_vertice({"name": d})
+
+        o_idx = self.graph.vs.find(name=o).index
+        d_idx = self.graph.vs.find(name=d).index
+
+        # calcular distância geográfica
+        a1 = self.airports_db[o]
+        a2 = self.airports_db[d]
+
+        distance = haversine(a1["lat"], a1["lon"], a2["lat"], a2["lon"])
+
+        # criar a aresta
+        self.graph.add_edge(o_idx, d_idx)
+        self.graph.es[-1]["weight"] = distance
+
+
+    '''
+        Remove Edge
+    '''
+    def remove_edge(self, edge_id: str):
+        """
+            Exemplo de string para se passar com origem e destino: "GRU-SSA"
+        """
+        origin, dest = edge_id.split("-")
+
+        if origin not in self.graph.vs["name"] or dest not in self.graph.vs["name"]:
+            return
+
+        o_idx = self.graph.vs.find(name=origin).index
+        d_idx = self.graph.vs.find(name=dest).index
+
+        eid = self.graph.get_eid(o_idx, d_idx, directed=True, error=False)
+        if eid != -1:
+            self.graph.delete_edges(eid)
+
+
+    # ------------------------------
+    # ROTAS MAIS CURTAS (DIJKSTRA)
+    # ------------------------------
+    def shortest_path(self, origin: str, destination: str):
+        if origin not in self.graph.vs["name"] or destination not in self.graph.vs["name"]:
+            raise ValueError("Aeroporto não existe no grafo.")
+
+        o_idx = self.graph.vs.find(name=origin).index
+        d_idx = self.graph.vs.find(name=destination).index
+
+        path = self.graph.get_shortest_paths(o_idx, to=d_idx, weights="weight", output="vpath")[0]
+
+        # converter índices em nomes
+        route = [self.graph.vs[i]["name"] for i in path]
+
+        # calcular distância total
+        total_distance = sum(
+            self.graph.es[self.graph.get_eid(path[i], path[i+1])]["weight"]
+            for i in range(len(path)-1)
+        )
+
+        return {
+            "route": route,
+            "distance_km": total_distance
+        }
 
 
 
+'''
+    Função para calcular a distância entre aeroportos
+'''
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371.0  # raio da Terra em km
 
-# Criando o grafo
-g = Graph(directed=True)
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
 
-# Adicinando 5 vertices
-g.add_vertices(5)
-g
-# Adicionando id's e labels aos vertices
-for i in range(len(g.vs)):
-    g.vs[i]["id"]= i
-    g.vs[i]["label"]= str(i)
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-# Adicionando arestas
-g.add_edges([(0,2),(0,1),(0,3),(1,2),(1,3),(2,4),(3,4)])
+    return R * c
 
-# Adicionando pesos e  labels de arestas
-weights = [8,6,3,5,6,4,9]
-g.es['weight'] = weights
-g.es['label'] = weights
 
-# visual_style = {}
+'''
+    Função para exportar o mapa com as rotas
+'''
+def show_route_on_map(route: list[str]):
+    airports = load("IATA")
+    m = folium.Map(zoom_start=3)
 
-# out_name = "graph.png"
+    coords = [
+        (airports[a]["lat"], airports[a]["lon"])
+        for a in route
+    ]
 
-# # Set bbox and margin
-# visual_style["bbox"] = (300,300)
-# visual_style["margin"] = 27
+    AntPath(
+        coords,
+        color="blue",
+        delay=500,
+        weight=5
+    ).add_to(m)
 
-# # Set vertex colours
-# visual_style["vertex_color"] = 'white'
-
-# # Set vertex size
-# visual_style["vertex_size"] = 45
-
-# # Set vertex lable size
-# visual_style["vertex_label_size"] = 22
-
-# # Don't curve the edges
-# visual_style["edge_curved"] = False
-
-# # Set  layout
-# my_layout = g.layout_lgl()
-# visual_style["layout"] = my_layout
-
-# # Plot o grafo
-# plot(g, out_name, **visual_style)
+    return m
