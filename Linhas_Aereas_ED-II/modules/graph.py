@@ -1,12 +1,12 @@
 # Import para pegar os dict's de vôos
 from modules.flight_manager import FlightManager
 
-# libs para mostrar as rotas no mapara
+# libs para mostrar as rotas no mapa
 import folium
 from folium.plugins import AntPath
 
 # lib para pegar as longitudes e latitudes
-from airportsdata import load
+import airportsdata
 
 # lib dos grafos
 from igraph import *
@@ -14,17 +14,20 @@ from igraph import *
 # para calculcar a distância baseada na longitude e latitude
 from math import radians, sin, cos, sqrt, atan2
 
+# para gerar o mapa html na pasta de templates
+import os
+
 
 class Routes_Graph:
     def __init__(self):
         self.graph = Graph(directed=True)
         self.flights = FlightManager.load_flights_dict()
-        self.airports_db = load("IATA")
+        self.airports_db = airportsdata.load("IATA")
 
-        # --- Coleta os nomdes dos aeroportos ---
+        # --- Coleta os nomes dos aeroportos ---
         airport_names = (
-            {f["origin"] for f in self.flights} |
-            {f["destination"] for f in self.flights}
+            {f["origin"] for f in self.flights.values()} |
+            {f["destiny"] for f in self.flights.values()}
         )
         airport_names = list(airport_names)
 
@@ -41,9 +44,9 @@ class Routes_Graph:
         edges = []
         weights = []
 
-        for f in self.flights:
+        for code, f in self.flights.items():
             o = f["origin"]
-            d = f["destination"]
+            d = f["destiny"]
 
             o_idx = self.index_of[o]
             d_idx = self.index_of[d]
@@ -65,7 +68,7 @@ class Routes_Graph:
 
 
     '''
-        Adiciona vértice
+        Adiciona vertice
     '''
     def add_vertice(self, vertice_id: str):
         """
@@ -80,7 +83,7 @@ class Routes_Graph:
         self.index_of[name] = len(self.graph.vs) - 1
 
     '''
-        Remove vértice
+        Remove vertice
     '''
     def remove_vertice(self, vertice_id: str):
         """
@@ -105,12 +108,12 @@ class Routes_Graph:
         """
         edge = {
             "origin": "GRU",
-            "destination": "LAX",
+            "destiny": "LAX",
             ...
         }
         """
         o = edge["origin"]
-        d = edge["destination"]
+        d = edge["destiny"]
 
         # garantir que os vértices existem
         if o not in self.graph.vs["name"]:
@@ -130,7 +133,7 @@ class Routes_Graph:
         # criar a aresta
         self.graph.add_edge(o_idx, d_idx)
         self.graph.es[-1]["weight"] = distance
-
+        
 
     '''
         Remove Edge
@@ -152,9 +155,9 @@ class Routes_Graph:
             self.graph.delete_edges(eid)
 
 
-    # ------------------------------
-    # ROTAS MAIS CURTAS (DIJKSTRA)
-    # ------------------------------
+    """
+        Utiliza o Dikstra para calcular a menor distância entre rotas
+    """
     def shortest_path(self, origin: str, destination: str):
         if origin not in self.graph.vs["name"] or destination not in self.graph.vs["name"]:
             raise ValueError("Aeroporto não existe no grafo.")
@@ -164,10 +167,10 @@ class Routes_Graph:
 
         path = self.graph.get_shortest_paths(o_idx, to=d_idx, weights="weight", output="vpath")[0]
 
-        # converter índices em nomes
+        # converte os índices em nomes
         route = [self.graph.vs[i]["name"] for i in path]
 
-        # calcular distância total
+        # calcula a distância total
         total_distance = sum(
             self.graph.es[self.graph.get_eid(path[i], path[i+1])]["weight"]
             for i in range(len(path)-1)
@@ -178,6 +181,39 @@ class Routes_Graph:
             "distance_km": total_distance
         }
 
+    def show_all_routes_map(self, filename="routes_map.html"):
+        m = folium.Map(zoom_start=2)
+        
+        for e in self.graph.es:
+            o_idx = e.source
+            d_idx = e.target
+
+            o_name = self.graph.vs[o_idx]["name"]
+            d_name = self.graph.vs[d_idx]["name"]
+
+            if o_name not in self.airports_db or d_name not in self.airports_db:
+                continue
+
+            a1 = self.airports_db[o_name]
+            a2 = self.airports_db[d_name]
+
+            coords = [
+                (a1["lat"], a1["lon"]),
+                (a2["lat"], a2["lon"])
+            ]
+
+            AntPath(
+                coords,
+                color="blue",
+                delay=300,
+                weight=3
+            ).add_to(m)
+
+        # Salva o arquivo
+        path = os.path.join("templates", filename)
+        m.save(path)
+        print(f"Mapa gerado e salvo em: {path}")
+        return m
 
 
 '''
@@ -194,25 +230,3 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
     return R * c
-
-
-'''
-    Função para exportar o mapa com as rotas
-'''
-def show_route_on_map(route: list[str]):
-    airports = load("IATA")
-    m = folium.Map(zoom_start=3)
-
-    coords = [
-        (airports[a]["lat"], airports[a]["lon"])
-        for a in route
-    ]
-
-    AntPath(
-        coords,
-        color="blue",
-        delay=500,
-        weight=5
-    ).add_to(m)
-
-    return m
