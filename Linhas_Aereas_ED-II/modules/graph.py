@@ -24,12 +24,8 @@ class Routes_Graph:
         self.flights = FlightManager.load_flights_dict()
         self.airports_db = airportsdata.load("IATA")
 
-        # --- Coleta os nomes dos aeroportos ---
-        airport_names = (
-            {f["origin"] for f in self.flights.values()} |
-            {f["destiny"] for f in self.flights.values()}
-        )
-        airport_names = list(airport_names)
+        # --- Coleta os nomes dos aeroportos --- #   
+        airport_names = self.get_airports_names()
 
         # cria vértices
         self.graph.add_vertices(len(airport_names))
@@ -66,6 +62,14 @@ class Routes_Graph:
         self.graph.add_edges(edges)
         self.graph.es["weight"] = weights
 
+    def get_airports_names(self) -> list:
+        airport_names = (
+            {f["origin"] for f in self.flights.values()} |
+            {f["destiny"] for f in self.flights.values()}
+        )
+
+        return list(airport_names)
+        
 
     '''
         Adiciona vertice
