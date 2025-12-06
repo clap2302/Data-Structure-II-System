@@ -176,6 +176,90 @@ class Routes_Graph:
             "distance_km": total_distance
         }
 
+    def show_chosen_route_map(self, route_list=None, filename="best_route.html"):
+        """
+        Gera um mapa destacando uma rota específica sobre a malha aérea.
+        
+        :param route_list: Lista de códigos IATA retornada pelo shortest_path. 
+                           Ex: ['GRU', 'MIA', 'JFK']
+        """
+        
+        # --- PAINEL DE CONTROLE ---
+        THEME = "CartoDB dark_matter"
+        
+        # Configuração do "Fundo" (Todas as outras rotas)
+        BG_COLOR = "#333333"  # Cinza escuro/fantasma
+        BG_WEIGHT = 0.5       # Bem fininho
+        BG_OPACITY = 0.2      # Bem transparente
+        
+        # Configuração da "Rota Principal" (O Caminho Dijkstra)
+        HERO_COLOR = "#00FF00" # Verde Neon (bem visível no mapa escuro)
+        HERO_WEIGHT = 4        # Grosso
+        HERO_OPACITY = 1.0     # Totalmente visível
+        # --------------------------
+
+        m = folium.Map(zoom_start=2, tiles=THEME)
+
+        # 1. (OPCIONAL) Desenhar a malha inteira bem fraquinha no fundo
+        # Isso dá contexto ("Olha quantas rotas existem, mas essa é a melhor")
+        for e in self.graph.es:
+            o_name = self.graph.vs[e.source]["name"]
+            d_name = self.graph.vs[e.target]["name"]
+            
+            if o_name in self.airports_db and d_name in self.airports_db:
+                a1 = self.airports_db[o_name]
+                a2 = self.airports_db[d_name]
+                
+                AntPath(
+                    [(a1["lat"], a1["lon"]), (a2["lat"], a2["lon"])],
+                    color=BG_COLOR, weight=BG_WEIGHT, opacity=BG_OPACITY, delay=2000
+                ).add_to(m)
+
+        # 2. Desenhar a Rota Escolhida (Highlight)
+        if route_list and len(route_list) > 1:
+            # O 'zip' é um truque pythonico para pegar pares: 
+            # Se a lista é [A, B, C], ele gera: (A, B) e depois (B, C)
+            for i in range(len(route_list) - 1):
+                origin = route_list[i]
+                destiny = route_list[i+1]
+
+                if origin in self.airports_db and destiny in self.airports_db:
+                    a1 = self.airports_db[origin]
+                    a2 = self.airports_db[destiny]
+                    
+                    # Desenha o segmento de destaque
+                    AntPath(
+                        [(a1["lat"], a1["lon"]), (a2["lat"], a2["lon"])],
+                        color=HERO_COLOR,
+                        weight=HERO_WEIGHT,
+                        opacity=HERO_OPACITY,
+                        delay=600, # Mais rápido para chamar atenção
+                        pulse_color="white",
+                        tooltip=f"Trecho: {origin} ➝ {destiny}",
+                        popup=f"Parte da melhor rota: {origin} para {destiny}"
+                    ).add_to(m)
+                    
+                    # Adiciona marcadores (pinos) nos pontos de parada
+                    folium.Marker(
+                        [a1["lat"], a1["lon"]],
+                        tooltip=f"Origem/Escala: {origin}",
+                        icon=folium.Icon(color="green", icon="plane", prefix="fa")
+                    ).add_to(m)
+                    
+                    # O último destino precisa de um marcador também
+                    if i == len(route_list) - 2:
+                        folium.Marker(
+                            [a2["lat"], a2["lon"]],
+                            tooltip=f"Destino Final: {destiny}",
+                            icon=folium.Icon(color="red", icon="flag", prefix="fa")
+                        ).add_to(m)
+
+        # Salva e retorna
+        path = os.path.join("templates", filename)
+        m.save(path)
+        print(f"Mapa da rota {route_list} salvo em: {path}")
+        return m
+
     def show_all_routes_map(self, filename="routes_map.html"):
         # ==========================================
         #  PAINEL DE PERSONALIZAÇÃO VISUAL
@@ -251,6 +335,8 @@ class Routes_Graph:
         m.save(path)
         print(f"Mapa gerado com o tema '{MAP_THEME}' em: {path}")
         return m
+
+
 
 
 '''
