@@ -177,7 +177,41 @@ class Routes_Graph:
         }
 
     def show_all_routes_map(self, filename="routes_map.html"):
-        m = folium.Map(zoom_start=2)
+        # ==========================================
+        #  PAINEL DE PERSONALIZAÇÃO VISUAL
+        # ==========================================
+        
+        # 1. TEMA DO MAPA
+        # Opções: "OpenStreetMap" (Claro/Padrão), "CartoDB dark_matter" (Escuro/Contraste alto), "CartoDB positron" (Minimalista)
+        # O tema escuro é excelente para fazer as rotas coloridas "brilharem".
+        MAP_THEME = "CartoDB dark_matter" 
+
+        # 2. COR DA ROTA
+        # A cor principal da linha animada. Pode usar nomes ("orange") ou Hex ("#FF5733").
+        ROUTE_COLOR = "orange" 
+        
+        # 3. COR DO PULSO (O "fundo" da linha)
+        # A cor que fica "atrás" da animação. Se for "white", parece que a luz corre sobre um trilho branco.
+        PULSE_COLOR = "white"
+
+        # 4. ESPESSURA DA LINHA
+        # Para evitar o "Spaghetti Plot", use valores baixos (1 ou 2). Linhas grossas poluem o mapa.
+        LINE_WEIGHT = 1.5 
+
+        # 5. TRANSPARÊNCIA (0.0 a 1.0)
+        # CRUCIAL: Se 0.5, duas linhas sobrepostas criam uma cor mais forte. 
+        # Isso ajuda a ver onde há congestionamento de rotas.
+        LINE_OPACITY = 0.6
+
+        # 6. VELOCIDADE DA ANIMAÇÃO
+        # Valor em milissegundos. Quanto maior, mais lenta a "formiguinha". 
+        # Ajuste para não deixar o mapa frenético demais.
+        ANIMATION_DELAY = 800 
+
+        # ==========================================
+
+        # Cria o mapa usando o tema escolhido
+        m = folium.Map(zoom_start=2, tiles=MAP_THEME)
         
         for e in self.graph.es:
             o_idx = e.source
@@ -197,17 +231,25 @@ class Routes_Graph:
                 (a2["lat"], a2["lon"])
             ]
 
+            # Cria o texto que aparece ao passar o mouse (Tooltip)
+            # Ajuda a identificar a rota no meio da bagunça
+            route_info = f"Rota: {o_name} ➝ {d_name}"
+
             AntPath(
                 coords,
-                color="blue",
-                delay=300,
-                weight=3
+                color=ROUTE_COLOR,       # Usa a var do painel
+                pulse_color=PULSE_COLOR, # Usa a var do painel
+                delay=ANIMATION_DELAY,   # Usa a var do painel
+                weight=LINE_WEIGHT,      # Usa a var do painel
+                opacity=LINE_OPACITY,    # Usa a var do painel
+                tooltip=route_info,      # Adiciona interatividade
+                popup=f"Origem: {o_name}<br>Destino: {d_name}" # Clique para detalhes
             ).add_to(m)
 
         # Salva o arquivo
         path = os.path.join("templates", filename)
         m.save(path)
-        print(f"Mapa gerado e salvo em: {path}")
+        print(f"Mapa gerado com o tema '{MAP_THEME}' em: {path}")
         return m
 
 
