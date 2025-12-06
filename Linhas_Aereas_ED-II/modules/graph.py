@@ -117,9 +117,9 @@ class Routes_Graph:
 
         # garantir que os vértices existem
         if o not in self.graph.vs["name"]:
-            self.add_vertice({"name": o})
+            self.add_vertice(o)
         if d not in self.graph.vs["name"]:
-            self.add_vertice({"name": d})
+            self.add_vertice(d)
 
         o_idx = self.graph.vs.find(name=o).index
         d_idx = self.graph.vs.find(name=d).index
@@ -138,17 +138,12 @@ class Routes_Graph:
     '''
         Remove Edge
     '''
-    def remove_edge(self, edge_id: str):
-        """
-            Exemplo de string para se passar com origem e destino: "GRU-SSA"
-        """
-        origin, dest = edge_id.split("-")
-
-        if origin not in self.graph.vs["name"] or dest not in self.graph.vs["name"]:
+    def remove_edge(self, origin: str, destiny:str):
+        if origin not in self.graph.vs["name"] or destiny not in self.graph.vs["name"]:
             return
 
         o_idx = self.graph.vs.find(name=origin).index
-        d_idx = self.graph.vs.find(name=dest).index
+        d_idx = self.graph.vs.find(name=destiny).index
 
         eid = self.graph.get_eid(o_idx, d_idx, directed=True, error=False)
         if eid != -1:
