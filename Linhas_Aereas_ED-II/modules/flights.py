@@ -111,7 +111,7 @@ def edit_flight(flight_code):
         })
 
         FlightManager.save_flights_dict(flights)
-        graph.remove_edge(origin_str+"-"+destiny_str)
+        graph.remove_edge(origin_str, destiny_str)
         graph.add_edge(flights[flight_code])
 
         return redirect(url_for("flights_bp.flight_management"))
@@ -132,7 +132,7 @@ def delete_flight(flight_code):
         del flights[flight_code]
 
     FlightManager.save_flights_dict(flights)
-    graph.remove_edge(origin_str+"-"+destiny_str)
+    graph.remove_edge(origin_str, destiny_str)
     return redirect(url_for("flights_bp.flight_management"))
 
 
