@@ -1,10 +1,13 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session, flash
 from modules.flight_manager import FlightManager
+from modules.graph import Routes_Graph
 from modules.reservation_manager import ReservationManager
 from functools import wraps
 
 # Carrega o dicionário dos voos já convertido pelo FlightManager
 flights = FlightManager.load_flights_dict()
+
+graph = Routes_Graph()
 
 flights_bp = Blueprint("flights_bp", __name__, url_prefix="/flights")
 
@@ -76,6 +79,8 @@ def add_flight():
         }
 
         FlightManager.save_flights_dict(flights)
+        graph.add_edge(flights[flight_code])
+
         return redirect(url_for("flights_bp.flight_management"))
 
     return render_template("add_flight.html")
@@ -87,6 +92,8 @@ def add_flight():
 @admin_required
 def edit_flight(flight_code):
     global flights
+    origin_str = flights[flight_code]["origin"].copy()
+    destiny_str = flights[flight_code]["destiny"].copy()
 
     if flight_code not in flights:
         return "Voo não encontrado", 404
@@ -104,6 +111,9 @@ def edit_flight(flight_code):
         })
 
         FlightManager.save_flights_dict(flights)
+        graph.remove_edge(origin_str+"-"+destiny_str)
+        graph.add_edge(flights[flight_code])
+
         return redirect(url_for("flights_bp.flight_management"))
 
     return render_template("edit_flight.html", flight_code=flight_code, flight=flights[flight_code])
@@ -115,11 +125,14 @@ def edit_flight(flight_code):
 @admin_required
 def delete_flight(flight_code):
     global flights
+    origin_str = flights[flight_code]["origin"].copy()
+    destiny_str = flights[flight_code]["destiny"].copy()
 
     if flight_code in flights:
         del flights[flight_code]
 
     FlightManager.save_flights_dict(flights)
+    graph.remove_edge(origin_str+"-"+destiny_str)
     return redirect(url_for("flights_bp.flight_management"))
 
 
