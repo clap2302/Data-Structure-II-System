@@ -19,7 +19,7 @@
         }
         th, td {
             border-bottom: 1px solid #ddd;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
         }
         th {
@@ -32,11 +32,11 @@
             text-decoration: none;
             background: #0059ff;
             color: white;
-            padding: 6px 12px;
+            padding: 6px 8px;
             border-radius: 6px;
             border: none;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
         button:hover, a:hover {
             background: #003ebf;
@@ -100,6 +100,12 @@
             <td>{{ f.duration }}</td>
 
             <td>
+                <a href="{{ url_for('flights_bp.show_selected_route',
+                     origin=f.origin,
+                     destiny=f.destiny) }}">
+                    Mostrar rota
+                </a>
+
                 {% if role == "admin" %}
                     <a href="{{ url_for('flights_bp.edit_flight', flight_code=code) }}">Editar</a>
 
@@ -112,7 +118,7 @@
                     {% if f.reserved < f.num_seats %}
                     <form action="{{ url_for('flights_bp.reserve_flight', flight_code=code) }}" 
                           method="POST" style="display:inline;">
-                        <button type="submit">Reservar</button>
+                        <button  type="submit">Reservar</button>
                     </form>
                     {% else %}
                         <span style="color:red; font-weight:bold;">Lotado</span>
@@ -123,11 +129,7 @@
         {% endfor %}
     </table>
 
-    {% else %}
-        <p>Nenhum voo cadastrado ainda.</p>
-    {% endif %}
-
-    {% if role == "user" %}
+        {% if role == "user" %}
     <div class="section">
         <h2>✈️ Meus voos reservados</h2>
 
@@ -146,6 +148,28 @@
         {% endif %}
     </div>
     {% endif %}
+    
+    <br>
+    <h1>Rotas gerais</h1>
+    <div style="
+        width: 100%;
+        height: 500px;
+        margin-top: 40px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    ">
+        <!-- iframe do mapa geral -->
+        <iframe 
+            src="{{ url_for('static', filename='routes_map.html') }}"
+            style="width:100%; height:100%; border:none;">
+        </iframe>
+    </div>
+
+    {% else %}
+        <p>Nenhum voo cadastrado ainda.</p>
+    {% endif %}
+
 
 </body>
 </html>

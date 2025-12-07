@@ -1,22 +1,89 @@
 {
-  "jsilva": ["ED209", "ED219"],
-  "moliveira": ["ED212", "ED204", "ED215"],
-  "csouza": ["ED201"],
-  "apereira": ["ED216", "ED218", "ED207", "ED203"],
-  "lalmeida": ["ED213"],
-  "jcastro": ["ED214", "ED210", "ED212"],
-  "rsantos": ["ED217", "ED220"],
-  "flima": ["ED216", "ED204", "ED218", "ED208"],
-  "bferreira": ["ED209"],
-  "pgomes": ["ED210", "ED215"],
-  "grocha": ["ED206"],
-  "cduarte": ["ED214", "ED207", "ED220"],
-  "eramos": ["ED213"],
-  "bmelo": ["ED218", "ED204", "ED216", "ED203"],
-  "rteixeira": ["ED212", "ED214"],
-  "lmartins": ["ED215"],
-  "tbarros": ["ED216", "ED218", "ED203", "ED204"],
-  "dfarias": ["ED206", "ED209"],
-  "aazevedo": ["ED214", "ED202"],
-  "icampos": ["ED217", "ED218", "ED210"]
+    "jsilva": [
+        "ED209",
+        "ED219"
+    ],
+    "moliveira": [
+        "ED212",
+        "ED204",
+        "ED215"
+    ],
+    "csouza": [
+        "ED201"
+    ],
+    "apereira": [
+        "ED216",
+        "ED218",
+        "ED207",
+        "ED203"
+    ],
+    "lalmeida": [
+        "ED213"
+    ],
+    "jcastro": [
+        "ED214",
+        "ED210",
+        "ED212",
+        "ED217"
+    ],
+    "rsantos": [
+        "ED217",
+        "ED220"
+    ],
+    "flima": [
+        "ED216",
+        "ED204",
+        "ED218",
+        "ED208"
+    ],
+    "bferreira": [
+        "ED209"
+    ],
+    "pgomes": [
+        "ED210",
+        "ED215"
+    ],
+    "grocha": [
+        "ED206"
+    ],
+    "cduarte": [
+        "ED214",
+        "ED207",
+        "ED220"
+    ],
+    "eramos": [
+        "ED213"
+    ],
+    "bmelo": [
+        "ED218",
+        "ED204",
+        "ED216",
+        "ED203"
+    ],
+    "rteixeira": [
+        "ED212",
+        "ED214"
+    ],
+    "lmartins": [
+        "ED215"
+    ],
+    "tbarros": [
+        "ED216",
+        "ED218",
+        "ED203",
+        "ED204"
+    ],
+    "dfarias": [
+        "ED206",
+        "ED209"
+    ],
+    "aazevedo": [
+        "ED214",
+        "ED202"
+    ],
+    "icampos": [
+        "ED217",
+        "ED218",
+        "ED210"
+    ]
 }

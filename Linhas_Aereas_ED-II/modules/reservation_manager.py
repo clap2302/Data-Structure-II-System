@@ -2,7 +2,7 @@ import json
 import os
 
 class ReservationManager:
-    RESERVATIONS_FILE = "reservations.json"
+    RESERVATIONS_FILE = "archives/reservations.json"
 
     @staticmethod
     def load_reservations() -> dict:

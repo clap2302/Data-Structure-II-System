@@ -152,6 +152,23 @@
         </header>
 
         <main>
+
+            <h2>Rotas gerais</h2>
+                <div style="
+                    width: 100%;
+                    height: 500px;
+                    margin-top: 40px;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                ">
+                    <!-- iframe do mapa geral -->
+                    <iframe 
+                        src="{{ url_for('static', filename='routes_map.html') }}"
+                        style="width:100%; height:100%; border:none;">
+                    </iframe>
+                </div>
+
             {% if flights %}
             <h2>Voos disponíveis:</h2>
 

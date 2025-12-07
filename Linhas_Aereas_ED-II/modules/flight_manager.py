@@ -114,3 +114,10 @@ class FlightManager:
         os.makedirs(os.path.dirname(FlightManager.FILE_PATH) or ".", exist_ok=True)
         with open(FlightManager.FILE_PATH, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
+
+    def get_all_flights():
+        """
+        Retorna todos os voos no mesmo formato usado pelo sistema:
+        { code: {origin, destiny, miles, ...} }
+        """
+        return FlightManager.load_flights_dict()

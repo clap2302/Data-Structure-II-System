@@ -38,19 +38,28 @@ def login_required(f):
 
 @flights_bp.route("/")
 def flight_management():
-    user_role = session.get("role", None)
-    user_name = session.get("user", None)
+    user_role = session.get("role")
+    user_name = session.get("user")
 
-    all_reservations = ReservationManager.load_reservations()
+    origin = request.args.get("origin")
+    destiny = request.args.get("destiny")
 
-    user_reservations = all_reservations.get(user_name, []) if user_role == "user" else []
+    if user_role == "user":
+        reservations = ReservationManager.load_reservations()
+        user_reservations = reservations.get(user_name, [])
+    else:
+        user_reservations = []
 
     return render_template(
         "flight_management.html",
         flights=FlightManager.load_flights_dict(),
         role=user_role,
-        reservations=user_reservations
+        reservations=user_reservations,
+        origin=origin,
+        destiny=destiny
     )
+
+
 
 
 # ---------------------- ADICIONAR VOO ---------------------- #
@@ -92,8 +101,8 @@ def add_flight():
 @admin_required
 def edit_flight(flight_code):
     global flights
-    origin_str = flights[flight_code]["origin"].copy()
-    destiny_str = flights[flight_code]["destiny"].copy()
+    origin_str = flights[flight_code]["origin"]
+    destiny_str = flights[flight_code]["destiny"]
 
     if flight_code not in flights:
         return "Voo não encontrado", 404
@@ -125,8 +134,8 @@ def edit_flight(flight_code):
 @admin_required
 def delete_flight(flight_code):
     global flights
-    origin_str = flights[flight_code]["origin"].copy()
-    destiny_str = flights[flight_code]["destiny"].copy()
+    origin_str = flights[flight_code]["origin"]
+    destiny_str = flights[flight_code]["destiny"]
 
     if flight_code in flights:
         del flights[flight_code]
@@ -144,20 +153,8 @@ def reserve_flight(flight_code):
         return "Acesso negado", 403
 
     user = session.get("user")
-    if not user:
-        return redirect(url_for("login_bp.login"))
 
-    # Criar estrutura de reservas caso ainda não exista
-    if "reservations" not in session:
-        session["reservations"] = {}
-
-    user_reservations = session["reservations"].get(user, [])
-
-    # Evitar duplicar reserva
-    if flight_code in user_reservations:
-        return redirect(url_for("flights_bp.flight_management"))
-
-    # +=+=+=+=+=+ CARREGAR E ATUALIZAR JSON DE VOOS +=+=+=+=+=+
+    # ------------------ ATUALIZA JSON DE ASSENTOS ------------------
     flights = FlightManager.load_flights_dict()
 
     if flight_code not in flights:
@@ -165,25 +162,26 @@ def reserve_flight(flight_code):
 
     flight = flights[flight_code]
 
-    # Verificar se ainda há assentos disponíveis
     if flight["num_seats"] <= 0:
         return "Não há mais assentos disponíveis neste voo.", 400
 
-    # Atualizar contadores de assentos
     flight["num_seats"] -= 1
     flight["reserved"] += 1
-
-    # Salvar alteração no dict
     flights[flight_code] = flight
-
-    # Gravar novamente no arquivo JSON
     FlightManager.save_flights_dict(flights)
-    # +=+=+=+=+=+ FIM DA ATUALIZAÇÃO DO JSON +=+=+=+=+=+
 
-    # Reserva do usuário
-    user_reservations.append(flight_code)
-    session["reservations"][user] = user_reservations
-    session.modified = True
+    # ------------------ SALVAR RESERVA NO JSON ------------------
+    ReservationManager.add_reservation(user, flight_code)
 
     return redirect(url_for("flights_bp.flight_management"))
+
+@flights_bp.route("/show_selected_route/<origin>/<destiny>")
+def show_selected_route(origin, destiny):
+
+    graph = Routes_Graph()
+    graph.show_route_only(origin, destiny)
+
+    return render_template("selected_route_page.html",
+                           origin=origin,
+                           destiny=destiny)
 

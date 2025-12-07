@@ -331,13 +331,52 @@ class Routes_Graph:
             ).add_to(m)
 
         # Salva o arquivo
-        path = os.path.join("templates", filename)
+        path = os.path.join("static", filename)
         m.save(path)
         print(f"Mapa gerado com o tema '{MAP_THEME}' em: {path}")
         return m
 
+    def show_route_only(self, origin, destiny, filename="selected_route.html"):
+        # pegar coordenadas da cidade
+        if origin not in self.airports_db or destiny not in self.airports_db:
+            raise ValueError("Aeroporto não encontrado no banco de dados.")
 
+        o_lat = self.airports_db[origin]["lat"]
+        o_lon = self.airports_db[origin]["lon"]
+        d_lat = self.airports_db[destiny]["lat"]
+        d_lon = self.airports_db[destiny]["lon"]
 
+        # cria o mapa centralizado entre as cidades
+        mid_lat = (o_lat + d_lat) / 2
+        mid_lon = (o_lon + d_lon) / 2
+
+        m = folium.Map(location=[mid_lat, mid_lon], zoom_start=4)
+
+        # marcador de origem
+        folium.Marker(
+            [o_lat, o_lon],
+            tooltip=f"Origem: {origin}",
+            icon=folium.Icon(color="green")
+        ).add_to(m)
+
+        # marcador de destino
+        folium.Marker(
+            [d_lat, d_lon],
+            tooltip=f"Destino: {destiny}",
+            icon=folium.Icon(color="red")
+        ).add_to(m)
+
+        # desenhar SOMENTE a rota
+        folium.PolyLine(
+            [(o_lat, o_lon), (d_lat, d_lon)],
+            weight=4,
+            color="blue"
+        ).add_to(m)
+
+        # sobrescreve o arquivo específico
+        path = os.path.join("static", filename)
+        m.save(path)
+        print(f"Mapa gerado em {path}")
 
 '''
     Função para calcular a distância entre aeroportos

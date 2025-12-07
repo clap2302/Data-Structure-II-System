@@ -6,8 +6,8 @@
     "miles": 225,
     "price": 389.0,
     "airplane_type": "Airbus A320",
-    "num_seats": 178,
-    "reserved_seats": 2,
+    "num_seats": 176,
+    "reserved_seats": 4,
     "departure_datetime": "2025-12-25 00:00",
     "duration_minutes": 70
   },
@@ -18,8 +18,8 @@
     "miles": 932,
     "price": 679.0,
     "airplane_type": "Boeing 737-800",
-    "num_seats": 184,
-    "reserved_seats": 2,
+    "num_seats": 183,
+    "reserved_seats": 3,
     "departure_datetime": "2025-12-25 01:30",
     "duration_minutes": 130
   },
@@ -90,8 +90,8 @@
     "miles": 1600,
     "price": 920.0,
     "airplane_type": "Boeing 737 MAX 8",
-    "num_seats": 175,
-    "reserved_seats": 0,
+    "num_seats": 172,
+    "reserved_seats": 3,
     "departure_datetime": "2025-12-25 10:30",
     "duration_minutes": 180
   },
@@ -150,8 +150,8 @@
     "miles": 251,
     "price": 270.0,
     "airplane_type": "Embraer E195",
-    "num_seats": 118,
-    "reserved_seats": 0,
+    "num_seats": 117,
+    "reserved_seats": 1,
     "departure_datetime": "2025-12-25 18:00",
     "duration_minutes": 60
   },
@@ -162,8 +162,8 @@
     "miles": 721,
     "price": 540.0,
     "airplane_type": "Airbus A319",
-    "num_seats": 144,
-    "reserved_seats": 0,
+    "num_seats": 143,
+    "reserved_seats": 1,
     "departure_datetime": "2025-12-25 19:30",
     "duration_minutes": 100
   },
@@ -174,8 +174,8 @@
     "miles": 413,
     "price": 360.0,
     "airplane_type": "Boeing 737-700",
-    "num_seats": 149,
-    "reserved_seats": 0,
+    "num_seats": 147,
+    "reserved_seats": 2,
     "departure_datetime": "2025-12-25 21:00",
     "duration_minutes": 75
   },
@@ -186,8 +186,8 @@
     "miles": 1930,
     "price": 1250.0,
     "airplane_type": "Boeing 737 MAX 8",
-    "num_seats": 174,
-    "reserved_seats": 1,
+    "num_seats": 173,
+    "reserved_seats": 2,
     "departure_datetime": "2025-12-25 22:30",
     "duration_minutes": 200
   },
@@ -198,8 +198,8 @@
     "miles": 1290,
     "price": 890.0,
     "airplane_type": "Airbus A320neo",
-    "num_seats": 186,
-    "reserved_seats": 0,
+    "num_seats": 184,
+    "reserved_seats": 2,
     "departure_datetime": "2025-12-26 00:00",
     "duration_minutes": 140
   },
@@ -210,8 +210,8 @@
     "miles": 1210,
     "price": 780.0,
     "airplane_type": "Airbus A321",
-    "num_seats": 219,
-    "reserved_seats": 1,
+    "num_seats": 218,
+    "reserved_seats": 2,
     "departure_datetime": "2025-12-26 01:30",
     "duration_minutes": 135
   },
@@ -234,21 +234,9 @@
     "miles": 490,
     "price": 415.0,
     "airplane_type": "Airbus A320",
-    "num_seats": 179,
-    "reserved_seats": 1,
+    "num_seats": 178,
+    "reserved_seats": 2,
     "departure_datetime": "2025-12-26 04:30",
     "duration_minutes": 90
-  },
-  {
-    "code": "1234",
-    "origin": "putaquepariu",
-    "destiny": "casadaporra",
-    "miles": 999,
-    "price": 0.0,
-    "airplane_type": "cadrro",
-    "num_seats": 4,
-    "reserved_seats": 0,
-    "departure_datetime": "hje",
-    "duration_minutes": 180
   }
 ]
