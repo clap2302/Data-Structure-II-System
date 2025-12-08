@@ -14,7 +14,7 @@ from igraph import *
 # para calculcar a distância baseada na longitude e latitude
 from math import radians, sin, cos, sqrt, atan2
 
-# para gerar o mapa html na pasta de templates
+# para gerar o mapa html na pasta de static
 import os
 
 
@@ -189,7 +189,7 @@ class Routes_Graph:
         """
         
         # --- PAINEL DE CONTROLE ---
-        THEME = "CartoDB dark_matter"
+        THEME = "OpenStreetMap"
         
         # Configuração do "Fundo" (Todas as outras rotas)
         BG_COLOR = "#333333"  # Cinza escuro/fantasma
@@ -197,12 +197,12 @@ class Routes_Graph:
         BG_OPACITY = 0.2      # Bem transparente
         
         # Configuração da "Rota Principal" (O Caminho Dijkstra)
-        HERO_COLOR = "#00FF00" # Verde Neon (bem visível no mapa escuro)
+        HERO_COLOR = "#0000FF" # Verde Neon (bem visível no mapa escuro)
         HERO_WEIGHT = 4        # Grosso
         HERO_OPACITY = 1.0     # Totalmente visível
         # --------------------------
 
-        m = folium.Map(zoom_start=2, tiles=THEME)
+        m = folium.Map(location=[-15.788, -47.882], zoom_start=4, tiles=THEME)
 
         # 1. (OPCIONAL) Desenhar a malha inteira bem fraquinha no fundo
         # Isso dá contexto ("Olha quantas rotas existem, mas essa é a melhor")
@@ -259,7 +259,7 @@ class Routes_Graph:
                         ).add_to(m)
 
         # Salva e retorna
-        path = os.path.join("templates", filename)
+        path = os.path.join("static", filename)
         m.save(path)
         print(f"Mapa da rota {route_list} salvo em: {path}")
         return m
@@ -272,11 +272,11 @@ class Routes_Graph:
         # 1. TEMA DO MAPA
         # Opções: "OpenStreetMap" (Claro/Padrão), "CartoDB dark_matter" (Escuro/Contraste alto), "CartoDB positron" (Minimalista)
         # O tema escuro é excelente para fazer as rotas coloridas "brilharem".
-        MAP_THEME = "CartoDB dark_matter" 
+        MAP_THEME = "OpenStreetMap" 
 
         # 2. COR DA ROTA
         # A cor principal da linha animada. Pode usar nomes ("orange") ou Hex ("#FF5733").
-        ROUTE_COLOR = "orange" 
+        ROUTE_COLOR = "blue" 
         
         # 3. COR DO PULSO (O "fundo" da linha)
         # A cor que fica "atrás" da animação. Se for "white", parece que a luz corre sobre um trilho branco.
@@ -284,7 +284,7 @@ class Routes_Graph:
 
         # 4. ESPESSURA DA LINHA
         # Para evitar o "Spaghetti Plot", use valores baixos (1 ou 2). Linhas grossas poluem o mapa.
-        LINE_WEIGHT = 1.5 
+        LINE_WEIGHT = 2
 
         # 5. TRANSPARÊNCIA (0.0 a 1.0)
         # CRUCIAL: Se 0.5, duas linhas sobrepostas criam uma cor mais forte. 

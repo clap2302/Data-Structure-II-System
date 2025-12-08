@@ -185,3 +185,31 @@ def show_selected_route(origin, destiny):
                            origin=origin,
                            destiny=destiny)
 
+@flights_bp.route("/show_best_route", methods=["GET"])
+def show_best_route():
+    origin = request.args.get("origin")
+    destiny = request.args.get("destiny")
+
+    result = None
+    routes = None
+
+    if origin and destiny:
+        graph = Routes_Graph()
+
+        try:
+            result = graph.shortest_path(origin, destiny)
+            routes = list(result)
+
+            # Gera o mapa
+            graph.show_chosen_route_map(result['route'], filename="best_route.html")
+
+        except ValueError as e:
+            flash(str(e), "error")
+
+    return render_template(
+        "best_route_page.html",
+        origin=origin,
+        destiny=destiny,
+        result=result,
+        routes=routes
+    )
