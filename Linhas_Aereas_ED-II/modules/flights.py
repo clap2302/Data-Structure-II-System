@@ -191,16 +191,22 @@ def show_best_route():
     destiny = request.args.get("destiny")
 
     result = None
-    routes = None
+    specific_airports = None
+    specific_flights = {}
 
     if origin and destiny:
         graph = Routes_Graph()
 
         try:
             result = graph.shortest_path(origin, destiny)
-            routes = list(result)
+            specific_airports = result['route']
 
-            # Gera o mapa
+            specific_flights = {}
+
+            for a, p in zip(specific_airports, specific_airports[1:]):
+                key = f"{a}-{p}"
+                specific_flights[key] = FlightManager.find_flights(a, p)
+
             graph.show_chosen_route_map(result['route'], filename="best_route.html")
 
         except ValueError as e:
@@ -211,5 +217,6 @@ def show_best_route():
         origin=origin,
         destiny=destiny,
         result=result,
-        routes=routes
+        routes=specific_airports,
+        flights=specific_flights
     )

@@ -6,8 +6,8 @@
     "miles": 225,
     "price": 389.0,
     "airplane_type": "Airbus A320",
-    "num_seats": 176,
-    "reserved_seats": 4,
+    "num_seats": 175,
+    "reserved_seats": 5,
     "departure_datetime": "2025-12-25 00:00",
     "duration_minutes": 70
   },

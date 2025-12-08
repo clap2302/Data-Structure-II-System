@@ -121,3 +121,15 @@ class FlightManager:
         { code: {origin, destiny, miles, ...} }
         """
         return FlightManager.load_flights_dict()
+    
+    def find_flights(origin, destiny):
+        flights = FlightManager.load_flights_dict()
+        correspondent_flights = []
+        
+        for code, flight in flights.items():
+            if (flight['origin'] == origin) and (flight['destiny'] == destiny):
+                flight_with_code = flight.copy()
+                flight_with_code["code"] = code
+                correspondent_flights.append(flight_with_code)
+
+        return correspondent_flights
