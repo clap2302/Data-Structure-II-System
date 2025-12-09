@@ -2,183 +2,434 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linhas Aéreas ED2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* ----------- ESTILOS GERAIS ----------- */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
-            margin: 0;
-            padding: 0;
+        /* Variáveis CSS para gerenciamento de cores */
+        :root {
+            --primary-color: #0d47a1; /* Azul Escuro Elegante */
+            --secondary-color: #2196f3; /* Azul Claro Vibrante */
+            --accent-color: #ff9800; /* Laranja de Destaque */
+            --background-light: #f5f8fa; /* Fundo Muito Claro */
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --shadow-subtle: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
+        /* ------------------------- ESTILOS GERAIS ------------------------- */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+        }
+
+        /* ------------------------- EFEITO CORTINA & ANIMAÇÃO ------------------------- */
+        .cortina {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #0d47a1, #1e88e5);
+            z-index: 99; /* Aumentado para garantir cobertura */
+            animation: abrirCortina 0.8s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes abrirCortina {
+            /* 0%: A cortina cobre 100% da tela */
+            0% { clip-path: inset(0 0 0 0); }
+            
+            /* 100%: A cortina está totalmente cortada (100% na esquerda) */
+            100% { clip-path: inset(0 0 0 100%); } 
+        }
+
+        .conteudo {
+            opacity: 0;
+            animation: apareceTela 0.6s ease-in forwards;
+            animation-delay: 1.0s; /* Começa após a cortina abrir */
+        }
+
+        @keyframes apareceTela {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ------------------------- HEADER ------------------------- */
         header {
-            background-color: #0059ff;
-            color: white;
-            padding: 20px 60px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         header h1 {
+            color: var(--text-light);
             margin: 0;
+            font-weight: 600;
             font-size: 1.8em;
-            letter-spacing: 1px;
         }
 
         header a {
             text-decoration: none;
-            background: white;
-            color: #0059ff;
-            font-weight: bold;
-            padding: 8px 16px;
-            border-radius: 25px;
+            background: var(--accent-color);
+            color: var(--text-dark);
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 4px;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         header a:hover {
-            background: #003ebf;
-            color: white;
+            background: #ffb300;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
+        /* ------------------------- MAIN CONTENT ------------------------- */
         main {
-            padding: 40px 10%;
+            padding: 40px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* ----------- TABELA DE VOOS ----------- */
-        table {
-            background: #fff;
-            border-collapse: collapse;
+        /* ------------------------- FORMULÁRIO DE BUSCA ------------------------- */
+        .search-form {
+            background: var(--text-light);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-subtle);
+            margin-bottom: 40px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+            flex-wrap: wrap; /* Para responsividade */
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-width: 200px;
+        }
+
+        .search-form label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-form input[type="text"] {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .search-form input[type="text"]:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+        }
+
+        .search-form button[type="submit"] {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .search-form button[type="submit"]:hover {
+            background-color: #083879;
+            transform: translateY(-1px);
+        }
+        
+        /* ------------------------- MAPA ------------------------- */
+        .map-container {
             width: 100%;
+            height: 550px;
+            margin-top: 30px;
+            margin-bottom: 50px;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid #ddd;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ------------------------- TABELA ------------------------- */
+        table {
+            background: var(--text-light);
+            border-collapse: separate; /* Permite border-radius */
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            margin-top: 20px;
         }
 
         th, td {
-            padding: 14px;
-            text-align: center;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee; /* Linha sutil */
         }
 
         th {
-            background: #0059ff;
-            color: white;
+            background: var(--primary-color);
+            color: var(--text-light);
             text-transform: uppercase;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #fcfcfc;
         }
 
-        td a, td button {
-            text-decoration: none;
-            background: #0059ff;
-            color: white;
+        tr:hover {
+            background-color: #e3f2fd; /* Light blue on hover */
+            transition: background-color 0.3s;
+        }
+        
+        /* Última linha sem border-bottom */
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ------------------------- BOTÕES DA TABELA ------------------------- */
+        td button, td a {
+            background: var(--secondary-color);
+            color: var(--text-light);
             padding: 8px 14px;
             border-radius: 5px;
             border: none;
+            text-decoration: none;
             cursor: pointer;
-            transition: background 0.3s ease;
+            font-weight: 400;
             font-size: 0.9em;
+            display: inline-block;
+            transition: background 0.3s ease, transform 0.2s;
         }
 
-        td a:hover, td button:hover {
-            background: #003ebf;
+        td button:hover, td a:hover {
+            background: #1565c0;
+            transform: translateY(-1px);
         }
 
+        /* ------------------------- MENSAGEM SEM VOOS ------------------------- */
         .no-flights {
             text-align: center;
-            background: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            font-size: 1.2em;
-            color: #333;
+            background: var(--text-light);
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-subtle);
+            font-size: 1.3em;
+            color: var(--primary-color);
+            border-left: 5px solid var(--accent-color);
         }
-
+        
+        /* ------------------------- RODAPÉ ------------------------- */
         footer {
+            background-color: var(--text-dark);
+            color: #b0bec5;
             text-align: center;
             padding: 20px;
-            color: #555;
             font-size: 0.9em;
+            margin-top: 50px;
+            border-top: 3px solid var(--accent-color);
         }
 
+        /* ------------------------- ANIMAÇÃO DO AVIÃO ------------------------- */
+        .aviao {
+            position: fixed;
+            width: 480px;
+            top: 40%;
+            left: -320px;
+            z-index: 99; /* Z-index alto para aparecer por cima */
+            opacity: 0.8;
+            animation: voar 2.5s ease-out forwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes voar {
+            0% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateX(150vw) translateY(-80vh) rotate(15deg); opacity: 0; }
+        }
+
+        /* ------------------------- RESPONSIVIDADE ------------------------- */
         @media (max-width: 768px) {
-            main {
-                padding: 20px;
-            }
-
-            table {
-                font-size: 0.9em;
-            }
-
             header {
+                padding: 15px 20px;
+            }
+            
+            header h1 {
+                font-size: 1.4em;
+            }
+
+            main {
+                padding: 20px 20px;
+            }
+
+            .search-form {
                 flex-direction: column;
-                text-align: center;
-                gap: 10px;
+                gap: 15px;
+            }
+            
+            .search-form button[type="submit"] {
+                width: 100%;
+            }
+
+            .map-container {
+                height: 350px;
+            }
+
+            table, thead, tbody, th, td, tr {
+                display: block; /* Tabela responsiva */
+            }
+
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            td {
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+
+            td:before {
+                position: absolute;
+                top: 0;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 600;
+                color: var(--primary-color);
+                content: attr(data-label); /* Usa o atributo data-label */
             }
         }
     </style>
 </head>
+
 <body>
 
-    <header>
-        <h1>Linhas Aéreas ED-II </h1>
-        <a href="{{ url_for('login_bp.login') }}">Login</a>
-    </header>
+    <img src="{{ url_for('static', filename='airplane.png') }}" class="aviao">
 
-    <main>
-        {% if flights %}
-        <h2>Voos disponíveis:</h2>
-        <table>
-            <tr>
-                <th>Código</th>
-                <th>Origem</th>
-                <th>Destino</th>
-                <th>Milhas</th>
-                <th>Preço</th>
-                <th>Tipo de Avião</th>
-                <th>Assentos</th>
-                <th>Ações</th>
-            </tr>
-            {% for code, f in flights.items() %}
-            <tr>
-                <td>{{ code }}</td>
-                <td>{{ f.origin }}</td>
-                <td>{{ f.destiny }}</td>
-                <td>{{ f.miles }}</td>
-                <td>R$ {{ f.ticket_price }}</td>
-                <td>{{ f.airplane_type }}</td>
-                <td>{{ f.num_seats }}</td>
-                <td>
-                    {% if role == "admin" %}
-                        <a href="{{ url_for('flights_bp.edit_flight', flight_code=code) }}">Editar</a>
-                        <form action="{{ url_for('flights_bp.delete_flight', flight_code=code) }}" method="POST" style="display:inline;">
-                            <button type="submit">Remover</button>
-                        </form>
-                    {% elif role == "user" %}
-                        <form action="{{ url_for('flights_bp.reserve_flight', flight_code=code) }}" method="POST" style="display:inline;">
-                            <button type="submit">Reservar</button>
-                        </form>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% else %}
-            <div class="no-flights">
-                🚀 Nenhum voo cadastrado ainda.<br>
-                Fique atento às próximas rotas!
+    <div class="cortina"></div>
+
+    <div class="conteudo">
+        <header>
+            <h1>Linhas Aéreas ED-II ✈️</h1>
+            <a href="{{ url_for('login_bp.login') }}">Login</a>
+        </header>
+
+        <main>
+            <form action="{{ url_for('flights_bp.show_best_route') }}" method="get" class="search-form">
+                <div class="form-group">
+                    <label for="origin">Origem:</label>
+                    <input type="text" id="origin" name="origin" placeholder="Ex: GRU" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="destiny">Destino:</label>
+                    <input type="text" id="destiny" name="destiny" placeholder="Ex: SSA" required>
+                </div>
+                
+                <button type="submit">Checar Melhor Rota</button>
+            </form>
+            
+            <hr>
+
+            <h2>🗺️ Rotas Ativas: Visão Geral</h2>
+            <div class="map-container">
+                <iframe 
+                    src="{{ url_for('static', filename='routes_map.html') }}"
+                    title="Mapa de Rotas Aéreas">
+                </iframe>
             </div>
-        {% endif %}
-    </main>
 
-    <footer>
-        © 2025 Sistema de Vendas de Passagens — Linhas Aéreas ED-II — Conectando você ao destino dos seus sonhos ✈️
-    </footer>
+            {% if flights %}
+            <h2>Lista de Voos Disponíveis</h2>
 
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Origem</th>
+                        <th>Destino</th>
+                        <th>Data/Hora</th>
+                        <th>Duração</th>
+                        <th>Preço</th>
+                        <th>Assentos Total</th>
+                        <th>Reservados</th>
+                        <th>Disponíveis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for code, f in flights.items() %}
+                    <tr>
+                        <td data-label="Código">{{ code }}</td>
+                        <td data-label="Origem">{{ f.origin }}</td>
+                        <td data-label="Destino">{{ f.destiny }}</td>
+                        <td data-label="Data/Hora">{{ f.flight_datetime }}</td>
+                        <td data-label="Duração">{{ f.duration }}</td>
+                        <td data-label="Preço" style="font-weight: 600; color: var(--primary-color);">R$ {{ f.ticket_price }}</td>
+                        <td data-label="Total Assentos">{{ f.num_seats }}</td>
+                        <td data-label="Reservados">{{ f.reserved }}</td>
+                        <td data-label="Disponíveis" style="font-weight: 700; color: #1e88e5;">{{ f.num_seats - f.reserved }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+                <div class="no-flights">
+                    🚀 Nenhum voo cadastrado ainda.<br>
+                    Fique atento às **próximas rotas**!
+                </div>
+            {% endif %}
+        </main>
+
+        <footer>
+            © 2025 Linhas Aéreas ED-II. Todos os direitos reservados.
+        </footer>
+    </div>
 </body>
 </html>

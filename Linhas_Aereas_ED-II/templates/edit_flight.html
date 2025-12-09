@@ -112,6 +112,13 @@
         <label for="num_seats">Número de assentos:</label>
         <input type="number" id="num_seats" name="num_seats" value="{{ flight.num_seats }}" required>
 
+        <label for="flight_datetime">Data/Hora do voo: (yyyy-mm-dd hh:mm)</label>
+        <input type="text" id="date" name="flight_datetime" value="{{ flight.flight_datetime }}" required>
+
+        <label for="duration">Duração em minutos:</label>
+        <input type="number" id="duration" name="duration" value="{{ flight.duration }}" required>
+
+
         <button type="submit">Salvar Alterações</button>
     </form>
     </div>

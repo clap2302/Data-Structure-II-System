@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Melhor Rota</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <style>
+    /* Variáveis CSS para Cores - Facilita a manutenção */
+    :root {
+      --primary-color: #4A90E2; /* Azul elegante */
+      --secondary-color: #3B7DD8; /* Azul escuro para hover */
+      --text-dark: #2C3E50; /* Cinza escuro para o texto principal */
+      --text-light: #7F8C8D; /* Cinza claro para detalhes */
+      --background-light: #F4F7FB; /* Fundo do corpo */
+      --card-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      --border-radius: 14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background-light);
+      margin: 0;
+      padding: 60px 20px;
+      line-height: 1.6;
+      color: var(--text-dark);
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: var(--border-radius);
+      max-width: 1000px; /* Aumentado para melhor visualização da tabela */
+      margin: auto;
+      box-shadow: var(--card-shadow);
+      animation: fadeIn 0.7s ease-out;
+      border-top: 5px solid var(--primary-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--primary-color);
+      text-align: center;
+      font-size: 34px;
+      margin-bottom: 35px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h2 .material-symbols-rounded {
+      font-size: 38px;
+      margin-right: 10px;
+    }
+
+    h3 {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      color: var(--text-dark);
+      font-size: 24px;
+      font-weight: 700;
+      border-bottom: 2px solid #EAECEE;
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    h3 .material-symbols-rounded {
+      font-size: 28px;
+      margin-right: 8px;
+      color: var(--primary-color);
+    }
+
+    /* Etapas da rota */
+    .route-step {
+      padding: 18px;
+      background: #ffffff;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      border: 1px solid #EAECEE;
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    
+    .route-step:before {
+      content: "📍"; /* Novo marcador visual */
+      margin-right: 10px;
+      font-size: 20px;
+    }
+
+    .arrow {
+      font-size: 28px;
+      color: var(--primary-color);
+      text-align: center;
+      margin: 5px 0;
+      font-weight: 800;
+    }
+
+    .distance-box {
+      margin-top: 30px;
+      padding: 20px;
+      background: #EAF3FD; /* Fundo suave */
+      border-radius: 12px;
+      font-size: 19px;
+      font-weight: 700;
+      border: 2px solid var(--primary-color);
+      color: var(--text-dark);
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Tabela - Estilo profissional e limpo */
+    table {
+      width: 100%;
+      border-collapse: separate; /* Permite border-radius nas células */
+      border-spacing: 0;
+      margin-top: 25px;
+      font-size: 14px;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #ECEFF1;
+    }
+
+    th {
+      background: var(--primary-color);
+      color: white;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 13px;
+    }
+
+    tr:nth-child(even) {
+      background: #F8F9FA;
+    }
+
+    tr:hover {
+      background: #E5F3FF;
+      transition: 0.2s;
+    }
+    
+    td:last-child, th:last-child {
+      text-align: center; /* Centraliza as colunas de números */
+    }
+    td:nth-last-child(2), th:nth-last-child(2), td:nth-last-child(3), th:nth-last-child(3) {
+      text-align: center;
+    }
+
+
+    .section-title {
+      background: #DCE8F7;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 12px;
+      color: var(--text-dark);
+      border-left: 5px solid var(--secondary-color);
+      text-align: left !important;
+    }
+    
+    .section-title:hover {
+      background: #DCE8F7 !important; /* Remove hover para título de seção */
+    }
+
+    /* Mapa */
+    .map-box {
+      width: 100%;
+      height: 550px; /* Aumentado */
+      margin-top: 40px;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    hr {
+      margin: 50px 0;
+      border: none;
+      border-top: 1px solid #ECEFF1;
+    }
+
+    /* Formulário - Design moderno e acessível */
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 180px; /* Distribui Origem, Destino e Botão */
+      gap: 20px;
+      align-items: flex-end; /* Alinha o botão com os campos */
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #EAECEE;
+      border-radius: var(--border-radius);
+      background: #FFFFFF;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 15px;
+    }
+
+    input {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #DCE4EC;
+      font-size: 16px;
+      transition: 0.3s;
+      width: 100%; /* Garante que o input ocupe o espaço */
+      box-sizing: border-box; /* Inclui padding e border no width */
+    }
+
+    input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    }
+
+    button {
+      padding: 14px 18px;
+      background: var(--primary-color);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      height: 48px; /* Altura igual à dos inputs */
+    }
+
+    button:hover {
+      background: var(--secondary-color);
+      box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4);
+    }
+    
+    /* Responsividade básica para telas menores */
+    @media (max-width: 768px) {
+      .card {
+        padding: 25px;
+      }
+      
+      form {
+        grid-template-columns: 1fr; /* Colunas empilhadas */
+      }
+      
+      button {
+        width: 100%;
+        margin-top: 0;
+      }
+      
+      th, td {
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+    }
+    
+    /* Mensagem sem resultado */
+    .empty-state {
+      padding: 40px;
+      border: 2px dashed #DCE4EC;
+      border-radius: 12px;
+      background: #FDFDFD;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <h2><span class="material-symbols-rounded">route</span> Melhor Rota Encontrada</h2>
+
+  <form method="get">
+    <div class="form-group">
+      <label for="origin">Origem:</label>
+      <input type="text" id="origin" name="origin" value="{{ origin or '' }}" required placeholder="Ex: Rio de Janeiro">
+    </div>
+    
+    <div class="form-group">
+      <label for="destiny">Destino:</label>
+      <input type="text" id="destiny" name="destiny" value="{{ destiny or '' }}" required placeholder="Ex: Salvador">
+    </div>
+
+    <button type="submit">
+      <span class="material-symbols-rounded" style="font-size: 18px; margin-right: 5px;">search</span>
+      Calcular Rota
+    </button>
+  </form>
+
+  <hr>
+
+  {% if result %}
+
+    <h3><span class="material-symbols-rounded">flight_takeoff</span> Rota Completa Detalhada</h3>
+
+    {% for node in result.route %}
+      <div class="route-step">{{ node }}</div>
+      {% if not loop.last %}
+        <div class="arrow"><span class="material-symbols-rounded">arrow_downward</span></div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="distance-box">
+      <span class="material-symbols-rounded" style="font-size: 24px; vertical-align: middle;">straighten</span>
+      <strong>Distância Total Estimada:</strong> {{ result.distance_km|round(2) }} km
+    </div>
+
+    {% if flights %}
+      <h3><span class="material-symbols-rounded">airplane_ticket</span> Sugestão de Voos Disponíveis por Trecho</h3>
+
+      <table>
+        <thead>
+          <tr>
+              <th>Código</th>
+              <th>Origem</th>
+              <th>Destino</th>
+              <th>Data/Hora</th>
+              <th>Duração</th>
+              <th>Preço</th>
+              <th>Assentos</th>
+              <th>Reservados</th>
+              <th>Disponíveis</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for route, flight_list in flights.items() %}
+              <tr>
+                <td colspan="9" class="section-title">
+                  Trecho: {{ route }}
+                </td>
+              </tr>
+
+              {% for f in flight_list %}
+              <tr>
+                  <td>{{ f.code }}</td>
+                  <td>{{ f.origin }}</td>
+                  <td>{{ f.destiny }}</td>
+                  <td>{{ f.flight_datetime }}</td>
+                  <td>{{ f.duration }}</td>
+                  <td>R$ {{ f.ticket_price }}</td>
+                  <td>{{ f.num_seats }}</td>
+                  <td>{{ f.reserved }}</td>
+                  <td><strong style="color: {{ 'red' if (f.num_seats - f.reserved) < 5 else 'green' }};">{{ f.num_seats - f.reserved }}</strong></td>
+              </tr>
+              {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+    
+    <h3><span class="material-symbols-rounded">map</span> Visualização da Rota</h3>
+    <div class="map-box">
+      <iframe 
+          src="{{ url_for('static', filename='best_route.html') }}"
+          title="Mapa da Melhor Rota"
+          style="width:100%; height:100%; border:none;">
+      </iframe>
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      <p style="color:var(--text-light); text-align:center; font-size:18px; font-style:italic; margin-bottom: 0;">
+        <span class="material-symbols-rounded" style="font-size: 32px; display: block; margin-bottom: 10px; color: var(--primary-color);">travel_explore</span>
+        Preencha os campos de **Origem** e **Destino** acima e clique em **Calcular Rota** para encontrar o melhor caminho.
+      </p>
+    </div>
+  {% endif %}
+
+</div>
+
+</body>
+</html>

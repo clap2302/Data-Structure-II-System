@@ -2,126 +2,368 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Página Inicial Administrativa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Painel de Administração</title>
     <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f8f8;
-        margin: 40px;
-    }
-    h2, h3 {
-        color: #333;
-    }
-    form {
-        background: #fff;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    input[type="text"],
-    input[type="password"],
-    select {
-        padding: 5px;
-        margin: 5px 0;
-        width: 200px;
-    }
-    input[type="submit"],
-    button {
-        background: #007bff;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    input[type="submit"]:hover,
-    button:hover {
-        background: #0056b3;
-    }
-    ul {
-        background: #fff;
-        padding: 10px;
-        border-radius: 8px;
-        list-style: none;
-    }
-    li {
-        margin: 5px 0;
-    }
-    a {
-        color: #007bff;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    a:hover {
-        text-decoration: underline;
-    }
-    .top-links {
-        margin-bottom: 20px;
-    }
+        /* Paleta Minimalista */
+        :root {
+            --primary-color: #3f51b5; /* Deep Indigo - Um azul mais sério */
+            --primary-dark: #303f9f;
+            --background-light: #eceff1; /* Cinza gelo, muito claro */
+            --card-background: #ffffff;
+            --text-dark: #263238; /* Quase preto */
+            --text-light: #546e7a; /* Cinza para detalhes */
+            --border-color: #cfd8dc; /* Borda suave */
+            --success-color: #43a047; /* Verde discreto */
+            --spacing: 20px;
+        }
+
+        /* Estilos Globais */
+        body {
+            /* font-family: 'Inter', Arial, sans-serif; */
+            font-family: Arial, sans-serif;
+            background-color: var(--background-light);
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 30px auto;
+            padding: 0 var(--spacing);
+        }
+
+        /* Títulos */
+        h2 {
+            font-size: 2.2em;
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-bottom: 5px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.4em;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        /* Top Links/Header */
+        .top-links {
+            background-color: var(--primary-color);
+            padding: 15px var(--spacing);
+            margin: -30px calc(-1 * var(--spacing)) 30px calc(-1 * var(--spacing)); /* Estende lateralmente */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: right;
+        }
+
+        .top-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 5px 15px;
+            margin-left: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .top-links a:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Layout Grid para Ações */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing);
+            margin-bottom: var(--spacing);
+        }
+
+        /* Estilo dos Formulários (Cards) */
+        form {
+            background: var(--card-background);
+            padding: var(--spacing);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            transition: box-shadow 0.3s;
+        }
+
+        form:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Inputs e Selects */
+        input[type="text"],
+        input[type="password"],
+        select {
+            padding: 10px 12px;
+            margin: 5px 0 15px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--background-light);
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            background-color: #ffffff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+
+        /* Botões */
+        input[type="submit"],
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: background 0.3s, transform 0.1s;
+            width: auto; /* Ajusta a largura para o conteúdo */
+            display: inline-block;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Botões de Busca em Linha */
+        .search-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: var(--spacing);
+            background: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .search-form input[type="text"] {
+            margin: 0;
+            flex-grow: 1;
+            width: auto;
+            background-color: var(--card-background);
+        }
+
+        /* Mensagem de Status */
+        .status-message {
+            padding: 12px;
+            margin: var(--spacing) 0;
+            border-radius: 6px;
+            font-weight: 500;
+            color: var(--success-color);
+            background-color: #e8f5e9; /* Fundo verde muito claro */
+            border: 1px solid var(--success-color);
+        }
+
+        /* Cards de Usuário */
+        .user-list-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .user-card {
+            background: var(--card-background);
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary-color);
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+
+        .user-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .user-field {
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .user-field strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: var(--border-color);
+            margin: var(--spacing) 0;
+        }
     </style>
 </head>
 
 <body>
-    <div class="top-links">
-    <a href="{{ url_for('login_bp.admin_dashboard') }}">⬅️ Voltar ao Painel</a> |
-    <a href="{{ url_for('flights_bp.flight_management') }}">✈️ Gerenciar Voos</a> |
-    <a href="{{ url_for('login_bp.logout') }}">🚪 Sair</a>
-    <a href="{{ url_for('home_bp.home') }}">Home</a>
+    <header class="top-links">
+        <a href="{{ url_for('login_bp.admin_dashboard') }}">
+            <span role="img" aria-label="Voltar">⬅️</span> Painel
+        </a>
+        <a href="{{ url_for('flights_bp.flight_management') }}">
+            <span role="img" aria-label="Gerenciar Voos">✈️</span> Voos
+        </a>
+        <a href="{{ url_for('home_bp.home') }}">
+            <span role="img" aria-label="Home">🏠</span> Home
+        </a>
+        <a href="{{ url_for('login_bp.logout') }}">
+            <span role="img" aria-label="Sair">🚪</span> Sair
+        </a>
+    </header>
+
+    <div class="container">
+
+        <h2>Gerenciamento de Usuários</h2>
+        <p>Bem-vindo, {{ user }}! Utilize as ferramentas abaixo para administrar as contas de usuários.</p>
+
+        {% if msg %}
+        <div class="status-message">{{ msg }}</div>
+        {% endif %}
+
+        <hr>
+
+        <div class="actions-grid">
+            <section>
+                <h3>➕ Adicionar Novo Usuário</h3>
+                <form method="post" action="{{ url_for('login_bp.add_user') }}">
+                    <label>Nome:</label>
+                    <input type="text" name="name" required>
+
+                    <label>CPF:</label>
+                    <input type="text" name="cpf" required>
+
+                    <label>Usuário (Login):</label>
+                    <input type="text" name="user" required>
+
+                    <label>Senha:</label>
+                    <input type="password" name="password" required>
+
+                    <label>Tipo:</label>
+                    <select name="role">
+                        <option value="user">Usuário Comum</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+
+                    <input type="submit" value="Adicionar">
+                </form>
+            </section>
+
+            <div>
+                <section>
+                    <h3>❌ Remover Usuário</h3>
+                    <form method="post" action="{{ url_for('login_bp.remove_user') }}">
+                        <label>CPF:</label>
+                        <input type="text" name="cpf" required>
+                        <input type="submit" value="Remover">
+                    </form>
+                </section>
+
+                <section>
+                    <h3>🔑 Alterar Senha</h3>
+                    <form method="post" action="{{ url_for('login_bp.change_password') }}">
+                        <label>Usuário (Login):</label>
+                        <input type="text" name="user" required>
+
+                        <label>Nova senha:</label>
+                        <input type="password" name="new_password" required>
+
+                        <input type="submit" value="Alterar Senha">
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="actions-grid">
+            <section>
+                <h3>🔎 Buscar por Nome</h3>
+                <form class="search-form" action="{{ url_for('login_bp.search_user_by_name') }}" method="get">
+                    <input type="text" name="nome" placeholder="Digite o nome completo ou parcial">
+                    <button type="submit">Buscar</button>
+                </form>
+            </section>
+
+            <section>
+                <h3>🔍 Buscar por CPF</h3>
+                <form class="search-form" action="{{ url_for('login_bp.search_user_by_cpf') }}" method="get">
+                    <input type="text" name="cpf" placeholder="Digite o CPF">
+                    <button type="submit">Buscar</button>
+                </form>
+            </section>
+        </div>
+
+        <hr>
+
+        <h3>📋 Lista de Usuários</h3>
+
+        <form method="post" action="{{ url_for('login_bp.list_by') }}">
+            <label>Ordenar e Visualizar por:</label>
+            <select name="list_by">
+                <option selected disabled>Selecione</option>
+                <option value="list_cpf">CPF</option>
+                <option value="list_name">Nome</option>
+            </select>
+            <input type="submit" value="Listar">
+        </form>
+
+        {% if users %}
+            <div class="user-list-section">
+                {% for u in users %}
+                <div class="user-card">
+                    <div class="user-name">{{ u.name }}</div>
+
+                    {% if u.user %}
+                    <div class="user-field"><strong>Usuário:</strong> {{ u.user }}</div>
+                    {% endif %}
+
+                    {% if u.cpf %}
+                    <div class="user-field"><strong>CPF:</strong> {{ u.cpf }}</div>
+                    {% endif %}
+
+                    {% if u.miles %}
+                    <div class="user-field"><strong>Milhas:</strong> {{ u.miles }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="margin-top: 20px;">Nenhum usuário cadastrado ou encontrado.</p>
+        {% endif %}
+
     </div>
-
-    <h2>Bem-vindo, {{ user }}!</h2>
-    <p>Gerencie os usuários da plataforma:</p>
-
-    <!-- Adicionar usuário -->
-    <h3>Adicionar usuário</h3>
-    <form method="post" action="{{ url_for('login_bp.add_user') }}">
-    <label>Usuário:</label><br>
-    <input type="text" name="user" required><br>
-
-    <label>Senha:</label><br>
-    <input type="password" name="password" required><br>
-
-    <label>Tipo:</label><br>
-    <select name="role">
-        <option value="user">Usuário comum</option>
-        <option value="admin">Administrador</option>
-    </select><br><br>
-
-    <input type="submit" value="Adicionar">
-    </form>
-
-    <!-- Remover usuário -->
-    <h3>Remover usuário</h3>
-    <form method="post" action="{{ url_for('login_bp.remove_user') }}">
-    <label>Usuário:</label><br>
-    <input type="text" name="user" required><br>
-    <input type="submit" value="Remover">
-    </form>
-
-    <!-- Alterar senha -->
-    <h3>Alterar senha</h3>
-    <form method="post" action="{{ url_for('login_bp.change_password') }}">
-    <label>Usuário:</label><br>
-    <input type="text" name="user" required><br>
-
-    <label>Nova senha:</label><br>
-    <input type="password" name="new_password" required><br>
-
-    <input type="submit" value="Alterar Senha">
-    </form>
-
-    <!-- Lista de usuários -->
-    <h3>Usuários atuais</h3>
-    <ul>
-    {% for u in users %}
-        <li>{{ u }}</li>
-    {% endfor %}
-    </ul>
-
-    {% if msg %}
-    <p style="color:green;">{{ msg }}</p>
-    {% endif %}
-
 </body>
 </html>
